@@ -34,6 +34,15 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(GLM)
 
+#fetch spdlog content
+FetchContent_Declare(
+	spdlog
+	GIT_REPOSITORY https://github.com/gabime/spdlog
+	GIT_TAG v1.15.3
+	GIT_SHALLOW ON
+)
+FetchContent_MakeAvailable(spdlog)
+
 #make library for glad
 add_library(${GLAD_LIB} STATIC "${THIRD_PARTY_LIBS}/glad/src/glad.c")
 target_include_directories(${GLAD_LIB} PUBLIC "${THIRD_PARTY_LIBS}/glad/include/")
@@ -42,7 +51,7 @@ find_package(OpenGL REQUIRED)
 
 #link all to exe
 add_executable(${PROJ_EXE} "src/main.cpp")
-target_link_libraries(${PROJ_EXE} PRIVATE SDL3::SDL3 glm::glm OpenGL::GL ${GLAD_LIB})
+target_link_libraries(${PROJ_EXE} PRIVATE SDL3::SDL3 glm::glm OpenGL::GL ${GLAD_LIB} spdlog::spdlog)
 target_include_directories(${PROJ_EXE} PRIVATE "include/")
 target_precompile_headers(${PROJ_EXE} PRIVATE "include/PCH.hpp")
 

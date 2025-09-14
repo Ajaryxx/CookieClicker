@@ -53,7 +53,7 @@ void Window::Loop()
 {
 	SDL_Event event;
 
-	glClearColor(0.f, 0.f, 0.f, 1.f);
+	
 	while (ShouldLoop)
 	{
 		while (SDL_PollEvent(&event))
@@ -64,11 +64,13 @@ void Window::Loop()
 				break;
 			}
 		}
+		glClearColor(0.f, 0.f, 0.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		SDL_GL_SwapWindow(m_Window);
 	}
 
 	SDL_GL_DestroyContext(m_GLContext);
+	SDL_DestroyWindow(m_Window);
 	SDL_Quit();
 }

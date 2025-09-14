@@ -1,2 +1,2 @@
 # CookieClicker
-A Cookie Clicker made with SFML
+A Cookie Clicker made with OpenGL and SDL

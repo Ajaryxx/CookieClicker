@@ -2,6 +2,7 @@
 #include "core/Window.hpp"
 #include "utility/OpenGLUtilities/VertexBuffer2D.hpp"
 #include "utility/OpenGLUtilities/Shader.hpp"
+#include "utility/OpenGLUtilities/Texture.hpp"
 #include "Shaders/Shaders.hpp"
 
 Window::~Window()
@@ -54,9 +55,43 @@ void Window::SetAllOpenGLWindowAttributes()
 
 void Window::Loop()
 {
-	
-	SDL_Event event;
+	Vertex2D vertex[4] =
+	{
+		Vertex2D{glm::vec2(-0.5f, -0.5f),
+				glm::vec2(0.f, 0.f), 
+				Color::WHITE},
+		Vertex2D{glm::vec2(-0.5f, 0.5f),
+				glm::vec2(0.f, 1.f),
+				Color::WHITE},
+		Vertex2D{glm::vec2(0.5f, -0.5f),
+				glm::vec2(1.f, 0.f), 
+				Color::WHITE},
+		Vertex2D{glm::vec2(0.5f, 0.5f),
+				glm::vec2(1.f, 1.f),
+				Color::WHITE},
+	};
 
+	VertexBuffer2D buffer(4, vertex, GL_STATIC_DRAW);
+
+
+	Shader shader(BasicVertexShader, BasicFragmentShader);
+
+	Texture texture("C:\\Users\\joelf\\Pictures\\campfire_fire.png");
+
+	shader.bind();
+	texture.bind();
+	int a = glGetUniformLocation(shader.GetShaderID(), "u_mvp");
+	int b = glGetUniformLocation(shader.GetShaderID(), "u_useTexture");
+	int c = glGetUniformLocation(shader.GetShaderID(), "u_sampler");
+
+	glUniformMatrix4fv(a, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.f)));
+	glUniformMatrix4fv(a, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.f)));
+	glUniform1i(b, 1);
+	glUniform1i(c, 0);
+	
+	
+
+	SDL_Event event;
 	while (ShouldLoop)
 	{
 		while (SDL_PollEvent(&event))
@@ -70,7 +105,13 @@ void Window::Loop()
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		
-
+		buffer.bind();
+		shader.bind();
+		texture.bind();
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+		texture.unbind();
+		shader.unbind();
+		buffer.unbind();
 
 		SDL_GL_SwapWindow(m_Window);
 	}

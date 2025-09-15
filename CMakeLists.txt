@@ -51,8 +51,11 @@ find_package(OpenGL REQUIRED)
 
 #link all to exe
 add_executable(${PROJ_EXE} "src/main.cpp")
+#add third party libs
+target_sources(${PROJ_EXE} PRIVATE "${THIRD_PARTY_LIBS}/impl.cpp")
+
 target_link_libraries(${PROJ_EXE} PRIVATE SDL3::SDL3 glm::glm OpenGL::GL ${GLAD_LIB} spdlog::spdlog)
-target_include_directories(${PROJ_EXE} PRIVATE "include/")
+target_include_directories(${PROJ_EXE} PRIVATE "include/" "${THIRD_PARTY_LIBS}/")
 target_precompile_headers(${PROJ_EXE} PRIVATE "include/PCH.hpp")
 
 add_subdirectory(src)

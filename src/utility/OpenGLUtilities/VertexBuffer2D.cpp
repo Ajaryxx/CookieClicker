@@ -24,7 +24,8 @@ VertexBuffer2D::VertexBuffer2D(uint8 numVerts, void* data, GLenum usage)
 }
 VertexBuffer2D::~VertexBuffer2D()
 {
-
+	glDeleteVertexArrays(1, &m_vao);
+	glDeleteBuffers(1, &m_bufferID);
 }
 void VertexBuffer2D::bind()
 {

@@ -7,7 +7,7 @@ Shader::Shader(const char* vertexShaderSource, const char* fragmentShaderSource)
 }
 Shader::~Shader()
 {
-
+	glDeleteProgram(m_programID);	
 }
 GLuint Shader::CompileShader(const char* shaderSource, GLenum type)
 {
@@ -28,6 +28,10 @@ GLuint Shader::CompileShader(const char* shaderSource, GLenum type)
 		glGetShaderInfoLog(shaderID, msgLenght, &msgLenght, message);
 
 		spdlog::error("SHADER COMPILE ERROR: {}", message);
+
+		delete[] message;
+		message = nullptr;
+
 		return 0;
 	}
 	
@@ -44,6 +48,12 @@ GLuint Shader::CreateProgram(const char* vertexShaderSource, const char* fragmen
 	glAttachShader(progrmID, fragmentShaderID);
 	
 	glLinkProgram(progrmID);
+
+	glDetachShader(progrmID, vertexShaderID);
+	glDetachShader(progrmID, fragmentShaderID);
+
+	glDeleteShader(vertexShaderID);
+	glDeleteShader(fragmentShaderID);
 
 	return progrmID;
 }

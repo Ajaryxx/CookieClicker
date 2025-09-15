@@ -30,11 +30,13 @@ struct Color
 	static const Color RED;
 	static const Color GREEN;
 	static const Color BLUE;
+	static const Color WHITE;
 
 };
 inline constexpr Color Color::RED = Color(1.f, 0.f, 0.f, 1.f);
 inline constexpr Color Color::GREEN = Color(0.f, 1.f, 0.f, 1.f);
 inline constexpr Color Color::BLUE = Color(0.f, 0.f, 1.f, 1.f);
+inline constexpr Color Color::WHITE = Color(1.f);
 
 
 struct Vertex2D

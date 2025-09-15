@@ -1,5 +1,8 @@
 #include "PCH.hpp"
 #include "core/Window.hpp"
+#include "utility/OpenGLUtilities/VertexBuffer2D.hpp"
+#include "utility/OpenGLUtilities/Shader.hpp"
+#include "Shaders/Shaders.hpp"
 
 Window::~Window()
 {
@@ -51,9 +54,9 @@ void Window::SetAllOpenGLWindowAttributes()
 
 void Window::Loop()
 {
+	
 	SDL_Event event;
 
-	
 	while (ShouldLoop)
 	{
 		while (SDL_PollEvent(&event))
@@ -66,6 +69,8 @@ void Window::Loop()
 		}
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
+		
+
 
 		SDL_GL_SwapWindow(m_Window);
 	}

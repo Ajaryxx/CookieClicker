@@ -17,3 +17,29 @@ struct WindowParameters
 	int32 height;
 	SDL_WindowFlags windowFlags;
 };
+
+struct Color
+{
+	constexpr Color(float r, float g, float b, float a) : r(r), g(g), b(b), a(a) {};
+	constexpr Color(float rgb) : r(rgb), g(rgb), b(rgb), a(1.f) {};
+	float r;
+	float g;
+	float b;
+	float a;
+
+	static const Color RED;
+	static const Color GREEN;
+	static const Color BLUE;
+
+};
+inline constexpr Color Color::RED = Color(1.f, 0.f, 0.f, 1.f);
+inline constexpr Color Color::GREEN = Color(0.f, 1.f, 0.f, 1.f);
+inline constexpr Color Color::BLUE = Color(0.f, 0.f, 1.f, 1.f);
+
+
+struct Vertex2D
+{
+	glm::vec2 position;
+	glm::vec2 texCoords;
+	Color color;
+};

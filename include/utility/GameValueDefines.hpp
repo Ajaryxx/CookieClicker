@@ -45,3 +45,12 @@ struct Vertex2D
 	glm::vec2 texCoords;
 	Color color;
 };
+
+enum SeverityFilter : uint8
+{
+	NOTIFICATION = 0x00,
+	LOW = 0x01,
+	MEDIUM = 0x02,
+	HIGH = 0x04,
+	ALL = NOTIFICATION | LOW | MEDIUM | HIGH,
+};

@@ -58,4 +58,7 @@ target_link_libraries(${PROJ_EXE} PRIVATE SDL3::SDL3 glm::glm OpenGL::GL ${GLAD_
 target_include_directories(${PROJ_EXE} PRIVATE "include/" "${THIRD_PARTY_LIBS}/")
 target_precompile_headers(${PROJ_EXE} PRIVATE "include/PCH.hpp")
 
+target_compile_definitions(${PROJ_EXE} PRIVATE
+ENABLE_OPENGL_DEBUG)
+
 add_subdirectory(src)

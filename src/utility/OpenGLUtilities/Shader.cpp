@@ -18,6 +18,7 @@ GLuint Shader::CompileShader(const char* shaderSource, GLenum type)
 	int32 result;
 	glGetShaderiv(shaderID, GL_COMPILE_STATUS, &result);
 
+	//Handle errors
 	if (result != GL_TRUE)
 	{
 		int32 msgLenght;
@@ -42,6 +43,12 @@ GLuint Shader::CreateProgram(const char* vertexShaderSource, const char* fragmen
 	GLuint vertexShaderID = CompileShader(vertexShaderSource, GL_VERTEX_SHADER);
 	GLuint fragmentShaderID = CompileShader(fragmentShaderSource, GL_FRAGMENT_SHADER);
 
+	if (!vertexShaderID || !fragmentShaderID)
+	{
+		spdlog::error("VertexShader or/and FragmentShader have an compile error");
+		return 0;
+	}
+
 	GLuint progrmID = glCreateProgram();
 
 	glAttachShader(progrmID, vertexShaderID);
@@ -49,6 +56,7 @@ GLuint Shader::CreateProgram(const char* vertexShaderSource, const char* fragmen
 	
 	glLinkProgram(progrmID);
 
+	//delete shaders
 	glDetachShader(progrmID, vertexShaderID);
 	glDetachShader(progrmID, fragmentShaderID);
 

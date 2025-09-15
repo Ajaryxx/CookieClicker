@@ -9,6 +9,20 @@ Window::~Window()
 {
 	spdlog::info("Window Destroyed");
 }
+void Window::SetAllOpenGLWindowAttributes()
+{
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+#ifdef ENABLE_OPENGL_DEBUG
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+#endif // ENABLE_OPENGL_DEBUG
+
+}
 bool Window::Init()
 {
 	if (!SDL_Init(SDL_INIT_VIDEO))
@@ -38,19 +52,9 @@ bool Window::Init()
 		spdlog::error("FAILED TO LOAD OPENGL FUNCTION POINTER");
 		return false;
 	}
-	spdlog::info("Window and OpenGl context succesfully initzialized! :)");
+	spdlog::info("Window and OpenGl context succesfully initzialized! :)");	
 
 	return true;
-}
-
-void Window::SetAllOpenGLWindowAttributes()
-{
-	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 }
 
 void Window::Loop()
@@ -73,21 +77,14 @@ void Window::Loop()
 
 	VertexBuffer2D buffer(4, vertex, GL_STATIC_DRAW);
 
-
 	Shader shader(BasicVertexShader, BasicFragmentShader);
 
-	Texture texture("C:\\Users\\joelf\\Pictures\\campfire_fire.png");
-
 	shader.bind();
-	texture.bind();
 	int a = glGetUniformLocation(shader.GetShaderID(), "u_mvp");
 	int b = glGetUniformLocation(shader.GetShaderID(), "u_useTexture");
-	int c = glGetUniformLocation(shader.GetShaderID(), "u_sampler");
 
 	glUniformMatrix4fv(a, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.f)));
-	glUniformMatrix4fv(a, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.f)));
-	glUniform1i(b, 1);
-	glUniform1i(c, 0);
+	glUniform1i(b, 0);
 	
 	
 
@@ -107,9 +104,7 @@ void Window::Loop()
 		
 		buffer.bind();
 		shader.bind();
-		texture.bind();
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-		texture.unbind();
 		shader.unbind();
 		buffer.unbind();
 

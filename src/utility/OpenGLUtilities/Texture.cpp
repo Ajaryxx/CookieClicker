@@ -10,11 +10,10 @@ Texture::Texture(const fs::path& texturePath)
 }
 Texture::~Texture()
 {
-	//glDeleteTextures(GL_TEXTURE_2D, &m_textureID);
+	glDeleteTextures(1, &m_textureID);
 }
 void Texture::LoadTexture(const fs::path& texturePath)
 {
-
 	if (!fs::exists(texturePath))
 	{
 		spdlog::info("Couldnt find texture path: {}", texturePath.u8string());
@@ -41,9 +40,8 @@ void Texture::LoadTexture(const fs::path& texturePath)
 	unbind();
 
 	if (image)
-	{
 		stbi_image_free(image);
-	}
+	
 }
 void Texture::bind()
 {

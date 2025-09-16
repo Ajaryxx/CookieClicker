@@ -16,7 +16,7 @@ out vec2 ao_texCoords;
 
 void main()
 {
-	gl_Position =  vec4(a_position, 0.f, 1.f);
+	gl_Position = u_mvp * vec4(a_position, 0.f, 1.f);
 	ao_texCoords = a_texCoords;
 	ao_color = a_color;	
 }

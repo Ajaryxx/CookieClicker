@@ -3,6 +3,7 @@
 #include "utility/OpenGLUtilities/VertexBuffer2D.hpp"
 #include "utility/OpenGLUtilities/Shader.hpp"
 #include "utility/OpenGLUtilities/Texture.hpp"
+#include "utility/OpenGLUtilities/Camera.hpp"
 #include "Shaders/Shaders.hpp"
 
 Window::~Window()
@@ -23,6 +24,7 @@ void Window::SetAllOpenGLWindowAttributes()
 #endif // ENABLE_OPENGL_DEBUG
 
 }
+
 bool Window::Init()
 {
 	if (!SDL_Init(SDL_INIT_VIDEO))
@@ -54,43 +56,19 @@ bool Window::Init()
 	}
 	spdlog::info("Window and OpenGl context succesfully initzialized! :)");	
 
+	glViewport(0, 0, 800, 600);
+
 	return true;
 }
 
 void Window::Loop()
 {
-	Vertex2D vertex[4] =
-	{
-		Vertex2D{glm::vec2(-0.5f, -0.5f),
-				glm::vec2(0.f, 0.f), 
-				Color::WHITE},
-		Vertex2D{glm::vec2(-0.5f, 0.5f),
-				glm::vec2(0.f, 1.f),
-				Color::WHITE},
-		Vertex2D{glm::vec2(0.5f, -0.5f),
-				glm::vec2(1.f, 0.f), 
-				Color::WHITE},
-		Vertex2D{glm::vec2(0.5f, 0.5f),
-				glm::vec2(1.f, 1.f),
-				Color::WHITE},
-	};
-
-	VertexBuffer2D buffer(4, vertex, GL_STATIC_DRAW);
-
-	Shader shader(BasicVertexShader, BasicFragmentShader);
-
-	shader.bind();
-	int a = glGetUniformLocation(shader.GetShaderID(), "u_mvp");
-	int b = glGetUniformLocation(shader.GetShaderID(), "u_useTexture");
-
-	glUniformMatrix4fv(a, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.f)));
-	glUniform1i(b, 0);
-	
 	
 
 	SDL_Event event;
 	while (ShouldLoop)
 	{
+		
 		while (SDL_PollEvent(&event))
 		{
 			if (event.type == SDL_EVENT_QUIT)
@@ -102,12 +80,7 @@ void Window::Loop()
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		
-		buffer.bind();
-		shader.bind();
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-		shader.unbind();
-		buffer.unbind();
-
+		
 		SDL_GL_SwapWindow(m_Window);
 	}
 

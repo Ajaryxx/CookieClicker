@@ -11,7 +11,6 @@ int main()
 	windowInfo.windowFlags = SDL_WINDOW_OPENGL;
 
 	Application app(windowInfo);
-
 	if (!app.Init())
 	{
 		return EXIT_FAILURE;

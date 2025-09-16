@@ -39,7 +39,7 @@ void Transform2D::UpdateModelMatrix()
 {
 	m_ModelMatrix = glm::mat4(1.f);
 
-	m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(m_Position, 0.f));
+	m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(m_Position + (m_Scale / 2.f), 0.f));
 	m_ModelMatrix = glm::rotate(m_ModelMatrix, m_Rotation, glm::vec3(0.f, 0.f, 1.f));
 	m_ModelMatrix = glm::scale(m_ModelMatrix, glm::vec3(m_Scale, 1.f));
 }

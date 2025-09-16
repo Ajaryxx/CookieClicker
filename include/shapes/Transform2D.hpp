@@ -28,6 +28,7 @@ public:
 		return m_ModelMatrix;
 	}
 	//Setter
+
 	void SetPosition(const glm::vec2& newPosition);
 	void SetOffset(const glm::vec2 offset);
 	void SetRotation(float newRotation);

@@ -6,7 +6,7 @@ public:
 	Transform2D(const glm::vec2& position = glm::vec2(0.f), 
 		float rotaion = 0.f, 
 		const glm::vec2 scale = glm::vec2(1.f));
-	~Transform2D() {};
+	~Transform2D() { };
 
 public:
 	//Getter

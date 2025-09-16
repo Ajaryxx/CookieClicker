@@ -4,6 +4,7 @@
 #include "utility/OpenGLUtilities/Shader.hpp"
 #include "utility/OpenGLUtilities/Texture.hpp"
 #include "utility/OpenGLUtilities/Camera.hpp"
+#include "shapes/GameObject2D.hpp"
 #include "shapes/Transform2D.hpp"
 #include "Shaders/Shaders.hpp"
 
@@ -80,6 +81,7 @@ void Window::Loop()
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		
 		SDL_GL_SwapWindow(m_Window);
 	}
 

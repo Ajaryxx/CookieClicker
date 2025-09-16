@@ -22,6 +22,7 @@ struct Color
 {
 	constexpr Color(float r, float g, float b, float a) : r(r), g(g), b(b), a(a) {};
 	constexpr Color(float rgb) : r(rgb), g(rgb), b(rgb), a(1.f) {};
+
 	float r;
 	float g;
 	float b;
@@ -41,16 +42,70 @@ inline constexpr Color Color::WHITE = Color(1.f);
 
 struct Vertex2D
 {
+	constexpr Vertex2D() : position(glm::vec2(0.f)), texCoords(glm::vec2(0.f)), color(Color::WHITE) {};
+	constexpr Vertex2D(const glm::vec2& position, const glm::vec2& texCoords, const Color& color) : position(position), texCoords(texCoords), color(color) {};
+
 	glm::vec2 position;
 	glm::vec2 texCoords;
 	Color color;
 };
 
-enum SeverityFilter : uint8
+struct VertexBuffer2DInfo
 {
+	uint8 numVertecies;
+	const Vertex2D* vertexData;
+	GLenum usage;
+};
+
+enum SeverityFilter : int8
+{
+	NONE = -1,
 	NOTIFICATION = 0x00,
 	LOW = 0x01,
 	MEDIUM = 0x02,
 	HIGH = 0x04,
 	ALL = NOTIFICATION | LOW | MEDIUM | HIGH,
+};
+
+struct Transformation2D
+{
+	glm::vec2 position;
+	float rotation;
+	glm::vec2 scale;
+};
+
+
+
+inline constexpr Vertex2D TriangleVertexData[3] = {
+
+	Vertex2D{glm::vec2(-1.f, -1.f),
+			glm::vec2(0.f, 0.f),
+			Color::WHITE},
+
+	Vertex2D{glm::vec2(0.f, 1.f),
+			glm::vec2(0.f, 1.f),
+			Color::WHITE},
+
+	Vertex2D{glm::vec2(1.f, -1.f),
+			glm::vec2(1.f, 0.f),
+			Color::WHITE},
+};
+
+inline constexpr Vertex2D RectangleVertexData[4] = {
+
+	Vertex2D{glm::vec2(-1.f, -1.f),
+			glm::vec2(0.f, 0.f),
+			Color::WHITE},
+
+	Vertex2D{glm::vec2(-1.f, 1.f),
+			glm::vec2(0.f, 1.f),
+			Color::WHITE},
+
+	Vertex2D{glm::vec2(1.f, -1.f),
+			glm::vec2(1.f, 0.f),
+			Color::WHITE},
+
+	Vertex2D{glm::vec2(1.f, 1.f),
+			glm::vec2(1.f, 1.f),
+			Color::WHITE},
 };

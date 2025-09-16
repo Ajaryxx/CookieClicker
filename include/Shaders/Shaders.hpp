@@ -1,7 +1,7 @@
 #pragma once
 
 //Baic Vertex Shader
-const char* BasicVertexShader = R"(
+inline const char* BasicVertexShader = R"(
 
 #version 330 core
 
@@ -24,7 +24,7 @@ void main()
 )";
 
 //Baic Fragment Shader
-const char* BasicFragmentShader = R"(
+inline const char* BasicFragmentShader = R"(
 
 #version 330 core
 

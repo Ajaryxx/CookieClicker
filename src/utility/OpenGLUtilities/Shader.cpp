@@ -74,3 +74,7 @@ void Shader::unbind()
 {
 	glUseProgram(0);
 }
+int Shader::GetUniformLocation(const char* uniform)
+{
+	return glGetUniformLocation(m_programID, uniform);
+}

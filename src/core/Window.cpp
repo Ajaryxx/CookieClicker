@@ -73,8 +73,8 @@ void Window::Loop()
 
 	Drawable* draw = new Object2D("fwef", vb, GL_TRIANGLES);
 	Object2D* o = (Object2D*)draw;
-	o->SetObjectColor(Color(0.5f, 0.2f, 1.f, 1.f));
-	o->SetObjectColor(Color(0.7f, 1.f, 1.f, 1.f));
+	o->SetTexture(std::make_unique<Texture>("C:\\Users\\joelf\\Pictures\\Wallpaper\\SunsetForest.jpg"));
+	
 	SDL_Event event;
 	while (ShouldLoop)
 	{

@@ -79,6 +79,12 @@ enum SeverityFilter : int8
 	HIGH = 0x04,
 	ALL = NOTIFICATION | LOW | MEDIUM | HIGH,
 };
+enum ObjectState : uint8
+{
+	NONE_STATE = 0x00,
+	USE_TEXTURE = 0x01,
+	INVISIBLE = 0x02,
+};
 
 struct Transformation2D
 {

@@ -6,7 +6,7 @@
 
 class VertexBuffer2D;
 class Shader;
-
+class Texture;
 
 /*Base class for every object in a scene*/
 /*NOTE: VertexData will be copied, you can delete YOUR vertexBuffer after creation*/
@@ -31,6 +31,7 @@ public:
 	
 	//Setter
 	void SetObjectColor(const Color& newColor);
+	void SetTexture(std::unique_ptr<Texture> newTexture);
 
 private:
 
@@ -46,9 +47,12 @@ private:
 
 	std::unique_ptr<VertexBuffer2D> m_vertexBuffer;
 	std::unique_ptr<Shader> m_shader;
+	std::unique_ptr<Texture> m_texture;
 
 	Vertex2D* m_VertexData = nullptr;
 	GLenum m_drawMode;
 
 	VertexBuffer2DInfo m_vbInfo;
+
+	uint8 m_objectState;
 };

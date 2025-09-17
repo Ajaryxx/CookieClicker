@@ -14,6 +14,8 @@ public:
 	{
 		return m_programID;
 	}
+
+	int GetUniformLocation(const char* uniform);
 private:
 
 

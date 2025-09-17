@@ -1,3 +1,3 @@
 target_sources(${PROJ_EXE} PRIVATE
 "Transform2D.cpp"
-"GameObject2D.cpp")
+"Object2D.cpp")

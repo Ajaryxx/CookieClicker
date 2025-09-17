@@ -4,7 +4,7 @@
 #include "utility/OpenGLUtilities/Shader.hpp"
 #include "utility/OpenGLUtilities/Texture.hpp"
 #include "utility/OpenGLUtilities/Camera.hpp"
-#include "shapes/GameObject2D.hpp"
+#include "shapes/Object2D.hpp"
 #include "shapes/Transform2D.hpp"
 #include "Shaders/Shaders.hpp"
 
@@ -65,7 +65,16 @@ bool Window::Init()
 
 void Window::Loop()
 {
-	
+
+	VertexBuffer2DInfo vb{};
+	vb.numVertecies = 3;
+	vb.usage = GL_DYNAMIC_DRAW;
+	vb.vertexData = TriangleVertexData;
+
+	Drawable* draw = new Object2D("fwef", vb, GL_TRIANGLES);
+	Object2D* o = (Object2D*)draw;
+	o->SetObjectColor(Color(0.5f, 0.2f, 1.f, 1.f));
+	o->SetObjectColor(Color(0.7f, 1.f, 1.f, 1.f));
 	SDL_Event event;
 	while (ShouldLoop)
 	{
@@ -81,7 +90,7 @@ void Window::Loop()
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		
+		draw->draw();
 		SDL_GL_SwapWindow(m_Window);
 	}
 

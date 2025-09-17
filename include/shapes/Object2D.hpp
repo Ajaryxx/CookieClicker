@@ -10,23 +10,37 @@ class Shader;
 
 /*Base class for every object in a scene*/
 /*NOTE: VertexData will be copied, you can delete YOUR vertexBuffer after creation*/
-class GameObject2D : public Transform2D, public Drawable
+/*You can choose your shader after the creation of this object*/
+class Object2D : public Drawable, public Transform2D
 {
 public:
-	GameObject2D(const std::string& objectName, 
+	Object2D(const std::string& objectName, 
 		const VertexBuffer2DInfo& vbInfo,
-		GLenum drawMode,
-		const Transformation2D& transformation = Transformation2D{glm::vec2(0.f), 0.f, glm::vec2(1.f)});
-	~GameObject2D();
+		GLenum drawMode);
+	~Object2D();
 	
 
+public:
+
+	//Getter
+
+	inline Shader* GetShader() const
+	{
+		return m_shader.get();
+	}
 	
+	//Setter
+	void SetObjectColor(const Color& newColor);
 
 private:
 
 	virtual void draw() override;
 
+
+	void UpdateBuffer();
+
 private:
+
 
 	std::string m_ObjectName;
 

@@ -10,6 +10,8 @@ public:
 
 	void bind();
 	void unbind();
+
+	void UpdateData(const VertexBuffer2DInfo& newInfo);
 private:
 	GLuint m_bufferID;
 	GLuint m_vao;

@@ -23,6 +23,19 @@ struct Color
 	constexpr Color(float r, float g, float b, float a) : r(r), g(g), b(b), a(a) {};
 	constexpr Color(float rgb) : r(rgb), g(rgb), b(rgb), a(1.f) {};
 
+	Color& operator=(const Color& other)
+	{
+		if (this != &other)
+		{
+			r = other.r;
+			g = other.g;
+			b = other.b;
+			a = other.a;
+		}
+
+		return *this;
+	}
+
 	float r;
 	float g;
 	float b;

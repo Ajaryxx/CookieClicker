@@ -37,3 +37,16 @@ void VertexBuffer2D::unbind()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 }
+
+void VertexBuffer2D::UpdateData(const VertexBuffer2DInfo& newInfo)
+{
+	bind();
+
+	void* addressLoc = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+
+	std::memcpy(addressLoc, newInfo.vertexData, sizeof(Vertex2D) * newInfo.numVertecies);
+
+	glUnmapBuffer(GL_ARRAY_BUFFER);
+
+	unbind();
+}

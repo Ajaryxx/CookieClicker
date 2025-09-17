@@ -7,9 +7,6 @@ public:
 	Shader(const char* vertexShaderSource, const char* fragmentShaderSource);
 	~Shader();
 
-	GLuint CompileShader(const char* shaderSource, GLenum type);
-	GLuint CreateProgram(const char* vertexShaderSource, const char* fragmentShaderSource);
-
 	void bind();
 	void unbind();
 
@@ -18,5 +15,10 @@ public:
 		return m_programID;
 	}
 private:
+
+
+	GLuint CompileShader(const char* shaderSource, GLenum type);
+	GLuint CreateProgram(const char* vertexShaderSource, const char* fragmentShaderSource);
+
 	GLuint m_programID;
 };

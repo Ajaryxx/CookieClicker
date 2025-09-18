@@ -3,6 +3,7 @@
 #include "utility/OpenGLUtilities/VertexBuffer2D.hpp"
 #include "utility/OpenGLUtilities/Shader.hpp"
 #include "utility/OpenGLUtilities/Texture.hpp"
+#include "utility/OpenGLUtilities/Camera.hpp"
 #include "shaders/Shaders.hpp"
 
 Object2D::Object2D(const std::string& objectName, const VertexBuffer2DInfo& vbInfo, GLenum drawMode) :
@@ -44,34 +45,48 @@ void Object2D::SetObjectColor(const Color& newColor)
 
 void Object2D::SetTexture(std::unique_ptr<Texture> newTexture)
 {
+	const int unifUseTex = m_shader->GetUniformLocation("u_useTexture");
+	const int unifSampler = m_shader->GetUniformLocation("u_sampler");
+
+	if (!newTexture)
+	{
+		m_texture = nullptr;
+		m_objectState &= ~ObjectState::USE_TEXTURE;
+		glUniform1i(unifUseTex, 0);
+		
+		return;
+	}
+
+
 	m_texture = std::move(newTexture);
 	m_objectState |= ObjectState::USE_TEXTURE;
 	m_shader->bind();
 
-	int unifUseTex = m_shader->GetUniformLocation("u_useTexture");
-	int unifSampler = m_shader->GetUniformLocation("u_sampler");
 	glUniform1i(unifSampler, 0);
 	glUniform1i(unifUseTex, 1);
+
+	m_shader->bind();
 }
 
 void Object2D::draw()
 {
 
-	if (m_objectState & (ObjectState::INVISIBLE))
+	if (m_objectState & ObjectState::INVISIBLE)
 		return;
 
 	m_vertexBuffer->bind();
 	m_shader->bind();
 
-	if (m_objectState & (ObjectState::USE_TEXTURE))
+	if (m_objectState & ObjectState::USE_TEXTURE)
 		m_texture->bind();
 
+	Camera2D cam(800, 600);
 	int a = glGetUniformLocation(m_shader->GetShaderID(), "u_mvp");
-	glUniformMatrix4fv(a, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.f)));
-	glDrawArrays(GL_TRIANGLES, 0, m_vbInfo.numVertecies);
+	glUniformMatrix4fv(a, 1, GL_FALSE, glm::value_ptr(cam.GetViewProjetion() * GetModelMatrix()));
+	glDrawArrays(m_drawMode, 0, m_vbInfo.numVertecies);
 
-	if (m_objectState & ~(ObjectState::USE_TEXTURE))
-		m_texture->bind();
+	if (m_objectState & ObjectState::USE_TEXTURE)
+		m_texture->unbind();
 
 	m_shader->unbind();
 	m_vertexBuffer->unbind();

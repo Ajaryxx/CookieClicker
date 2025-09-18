@@ -12,12 +12,9 @@ int main()
 
 	Application app(windowInfo);
 	if (!app.Init())
-	{
 		return EXIT_FAILURE;
-	}
 	else
-	{
 		app.Run();
-	}
+	
 	return EXIT_SUCCESS;
 }

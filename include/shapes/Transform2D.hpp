@@ -29,10 +29,10 @@ public:
 	}
 	//Setter
 
-	void SetPosition(const glm::vec2& newPosition);
-	void SetOffset(const glm::vec2 offset);
-	void SetRotation(float newRotation);
-	void SetScale(const glm::vec2& newScale);
+	virtual void SetPosition(const glm::vec2& newPosition);
+	virtual void SetOffset(const glm::vec2 offset);
+	virtual void SetRotation(float newRotation);
+	virtual void SetScale(const glm::vec2& newScale);
 
 protected:
 

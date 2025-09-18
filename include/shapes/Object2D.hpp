@@ -30,7 +30,9 @@ public:
 	}
 	
 	//Setter
+
 	void SetObjectColor(const Color& newColor);
+
 	void SetTexture(std::unique_ptr<Texture> newTexture);
 
 private:
@@ -54,5 +56,5 @@ private:
 
 	VertexBuffer2DInfo m_vbInfo;
 
-	uint8 m_objectState;
+	uint8 m_objectState = 0;
 };

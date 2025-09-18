@@ -1,12 +1,8 @@
 #include "PCH.hpp"
 #include "core/Window.hpp"
-#include "utility/OpenGLUtilities/VertexBuffer2D.hpp"
-#include "utility/OpenGLUtilities/Shader.hpp"
-#include "utility/OpenGLUtilities/Texture.hpp"
 #include "utility/OpenGLUtilities/Camera.hpp"
-#include "shapes/Object2D.hpp"
-#include "shapes/Transform2D.hpp"
-#include "Shaders/Shaders.hpp"
+#include "shapes/RectangleShape.hpp"
+
 
 Window::~Window()
 {
@@ -66,15 +62,10 @@ bool Window::Init()
 void Window::Loop()
 {
 
-	VertexBuffer2DInfo vb{};
-	vb.numVertecies = 3;
-	vb.usage = GL_DYNAMIC_DRAW;
-	vb.vertexData = TriangleVertexData;
-
-	Drawable* draw = new Object2D("fwef", vb, GL_TRIANGLES);
-	Object2D* o = (Object2D*)draw;
-	o->SetTexture(std::make_unique<Texture>("C:\\Users\\joelf\\Pictures\\Wallpaper\\SunsetForest.jpg"));
-	
+	Drawable* draw = new RectangleShape("fwef");
+	RectangleShape* o = (RectangleShape*)draw;
+	o->SetSize({ 200.f, 200.f });
+	o->SetScale({ 0.5f, 0.5f });
 	SDL_Event event;
 	while (ShouldLoop)
 	{

@@ -1,7 +1,6 @@
 #include "PCH.hpp"
 #include "core/Window.hpp"
-#include "utility/OpenGLUtilities/Camera.hpp"
-#include "shapes/RectangleShape.hpp"
+#include "scenes/BaseScene.hpp"
 
 
 Window::~Window()
@@ -61,6 +60,18 @@ bool Window::Init()
 
 void Window::Loop()
 {
+	BaseScene scene;
+	scene.AddLayer("a", 0);
+	scene.AddLayer("b", 0);
+	scene.AddLayer("c", 0);
+	auto a = scene.GetLayerWithName("a");
+	auto b = scene.GetLayerWithName("b");
+	auto c = scene.GetLayerWithName("c");
+
+	auto ab = scene.GetLayerWithName("a");
+	auto bb = scene.GetLayerWithName("b");
+	auto cb = scene.GetLayerWithName("c");
+	
 	SDL_Event event;
 	while (ShouldLoop)
 	{

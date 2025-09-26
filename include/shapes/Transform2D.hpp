@@ -11,19 +11,19 @@ public:
 public:
 	//Getter
 
-	inline glm::vec2 GetPosition() const
+	inline virtual glm::vec2 GetPosition() const
 	{
 		return m_Position;
 	}
-	inline float GetRotaion() const
+	inline virtual float GetRotaion() const
 	{
 		return m_Rotation;
 	}
-	inline glm::vec2 GetScale() const
+	inline virtual glm::vec2 GetScale() const
 	{
 		return m_Scale;
 	}
-	inline glm::mat4 GetModelMatrix() const
+	inline virtual glm::mat4 GetModelMatrix() const
 	{
 		return m_ModelMatrix;
 	}

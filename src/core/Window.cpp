@@ -61,11 +61,6 @@ bool Window::Init()
 
 void Window::Loop()
 {
-
-	Drawable* draw = new RectangleShape("fwef");
-	RectangleShape* o = (RectangleShape*)draw;
-	o->SetSize({ 200.f, 200.f });
-	o->SetScale({ 0.5f, 0.5f });
 	SDL_Event event;
 	while (ShouldLoop)
 	{
@@ -81,7 +76,7 @@ void Window::Loop()
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		draw->draw();
+		
 		SDL_GL_SwapWindow(m_Window);
 	}
 

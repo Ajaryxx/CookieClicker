@@ -14,6 +14,10 @@ public:
 	}
 
 	void SetSize(const glm::vec2& newSize);
+	virtual glm::vec2 GetScale() const override
+	{
+		return m_factor;
+	}
 	void SetScale(const glm::vec2& factor) override;
 private:
 

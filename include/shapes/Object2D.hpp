@@ -24,6 +24,11 @@ public:
 
 	//Getter
 
+	inline std::string GetName() const
+	{
+		return m_ObjectName;
+	}
+
 	inline Shader* GetShader() const
 	{
 		return m_shader.get();

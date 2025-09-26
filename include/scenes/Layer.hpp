@@ -11,6 +11,9 @@ public:
 	template<typename T>
 	T* AddObject(const std::string& objectName);
 
+	void RemoveObject(const std::string& objectName);
+	std::shared_ptr<Object2D> GetObject(const std::string& objectName);
+
 	inline std::string GetName() const
 	{
 		return m_LayerName;

@@ -61,7 +61,7 @@ bool Window::Init()
 void Window::Loop()
 {
 	BaseScene scene;
-	scene.AddLayer("a", 0);
+	scene.AddLayer("a", 1);
 	scene.AddLayer("b", 0);
 	scene.AddLayer("c", 0);
 	auto a = scene.GetLayerWithName("a");

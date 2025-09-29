@@ -68,7 +68,7 @@ void Object2D::SetTexture(std::unique_ptr<Texture> newTexture)
 	m_shader->bind();
 }
 
-void Object2D::draw()
+void Object2D::draw() const
 {
 
 	if (m_objectState & ObjectState::INVISIBLE)

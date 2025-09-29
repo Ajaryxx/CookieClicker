@@ -1,6 +1,8 @@
 #include "PCH.hpp"
 #include "core/Window.hpp"
 #include "scenes/BaseScene.hpp"
+#include "shapes/Object2D.hpp"
+#include "shapes/RectangleShape.hpp"
 
 
 Window::~Window()
@@ -61,17 +63,11 @@ bool Window::Init()
 void Window::Loop()
 {
 	BaseScene scene;
-	scene.AddLayer("a", 1);
-	scene.AddLayer("b", 0);
-	scene.AddLayer("c", 0);
-	auto a = scene.GetLayerWithName("a");
-	auto b = scene.GetLayerWithName("b");
-	auto c = scene.GetLayerWithName("c");
+	auto& layer = scene.AddLayer("a", 0);
+	auto& obj = layer->AddObject<RectangleShape>("SpirteTest");
+	obj->SetSize({ 100.f, 100.f });
+	obj->SetPosition({ 690.f, 500.f });
 
-	auto ab = scene.GetLayerWithName("a");
-	auto bb = scene.GetLayerWithName("b");
-	auto cb = scene.GetLayerWithName("c");
-	
 	SDL_Event event;
 	while (ShouldLoop)
 	{
@@ -86,6 +82,15 @@ void Window::Loop()
 		}
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
+		for (const auto& item : scene.GetSceneLayers())
+		{
+			for (const auto& draw : item.second->GetLayerObjects())
+			{
+				draw->draw();
+			}
+			
+		}
+		
 
 		
 		SDL_GL_SwapWindow(m_Window);

@@ -15,7 +15,7 @@ std::shared_ptr<Layer> BaseScene::AddLayer(const std::string& layerName, uint8 l
 {
 	if (layerIndex > m_v_Layers.size())
 	{
-		spdlog::warn("Layer Index out of bounds {}", layerName);
+		spdlog::error("Layer Index out of bounds {}", layerName);
 		return nullptr;
 	}
 		

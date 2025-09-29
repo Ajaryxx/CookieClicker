@@ -18,7 +18,7 @@ std::shared_ptr<Object2D> Layer::GetObject(const std::string& objectName)
 			return item;
 	}
 
-	spdlog::warn("Couldnt find Object: {}", m_LayerName, objectName);
+	spdlog::warn("Couldnt find object from Layer: {} Object: {}", m_LayerName, objectName);
 	return nullptr;
 	
 }

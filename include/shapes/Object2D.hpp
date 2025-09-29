@@ -40,10 +40,12 @@ public:
 
 	void SetTexture(std::unique_ptr<Texture> newTexture);
 
+	virtual void draw() const override;
+
 private:
 
 
-	virtual void draw() override;
+	
 
 
 	void UpdateBuffer();

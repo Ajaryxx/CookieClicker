@@ -61,6 +61,7 @@ CXX_STANDARD_REQUIRED ON
 CXX_EXTENSIONS OFF)
 
 target_include_directories(${CookieClicker_Exe} PRIVATE "include")
+target_precompile_headers(${CookieClicker_Exe} PRIVATE "include/PCH.hpp")
 
 target_link_libraries(${CookieClicker_Exe} PRIVATE 
 
@@ -76,3 +77,11 @@ ImGui-SFML::ImGui-SFML
 
 #we always want to compile static
 target_compile_definitions(${CookieClicker_Exe} PUBLIC SFML_STATIC TGUI_STATIC)
+#set Release or Debug
+target_compile_definitions(${CookieClicker_Exe} PUBLIC 
+$<$<CONFIG:Debug>:GAME_DEBUG>
+$<$<CONFIG:Release>:GAME_RELEASE>)
+
+#add all subdirectories
+add_subdirectory(src)
+

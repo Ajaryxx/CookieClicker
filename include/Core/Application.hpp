@@ -10,10 +10,13 @@ public:
 	Application(const Application&) = delete;
 	~Application();
 
+	Application& operator=(const Application& other) = delete;
+
 	inline Application& Get() { return *app; }
 
 	void Run();
 	void ShutDown();
+	Window* GetWindow() const { return m_Window.get(); }
 private:
 
 	inline static Application* app = nullptr;

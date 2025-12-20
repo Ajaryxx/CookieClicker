@@ -11,7 +11,7 @@ Application::Application(const ApplicationSpecification& specification)
 
 Application::~Application()
 {
-
+	ShutDown();
 }
 void Application::Run()
 {

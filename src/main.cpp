@@ -7,6 +7,7 @@
 
 #if (defined(_WIN32) && GAME_DEBUG) || defined(__linux__)
 
+//Windows Debug; Linux Debug, Release
 int main()
 {
 	sf::ContextSettings contSettings;
@@ -33,11 +34,11 @@ int main()
 	Application app(spec);
 	app.Run();
 
-
 	return EXIT_SUCCESS;
 }
 #endif // defined(_WIN32) && GAME_DEBUG || defined(__linux__)
 
+//Windows Release
 #if (defined(_WIN32) && GAME_RELEASE)
 
 	int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)

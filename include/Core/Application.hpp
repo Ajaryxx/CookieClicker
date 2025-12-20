@@ -13,6 +13,7 @@ public:
 	inline Application& Get() { return *app; }
 
 	void Run();
+	void ShutDown();
 private:
 
 	inline static Application* app = nullptr;

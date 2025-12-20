@@ -54,6 +54,12 @@ FetchContent_MakeAvailable(ImGuiSFML)
 #create exe
 add_executable(${CookieClicker_Exe} "src/main.cpp")
 
+#if we are on MSVC and building it in release to call WinMain
+if(MSVC)
+target_link_options(${CookieClicker_Exe} PRIVATE
+$<$<CONFIG:Release>:/SUBSYSTEM:WINDOWS>)
+endif()
+
 #set target game properties
 set_target_properties(${CookieClicker_Exe} PROPERTIES
 CXX_STANDARD 23
@@ -77,10 +83,11 @@ ImGui-SFML::ImGui-SFML
 
 #we always want to compile static
 target_compile_definitions(${CookieClicker_Exe} PUBLIC SFML_STATIC TGUI_STATIC)
-#set Release or Debug
+#set define Release or Debug
 target_compile_definitions(${CookieClicker_Exe} PUBLIC 
 $<$<CONFIG:Debug>:GAME_DEBUG>
 $<$<CONFIG:Release>:GAME_RELEASE>)
+
 
 #add all subdirectories
 add_subdirectory(src)

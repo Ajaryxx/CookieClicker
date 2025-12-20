@@ -17,3 +17,7 @@ void Application::Run()
 {
 	m_Window->Loop();
 }
+void Application::ShutDown()
+{
+
+}

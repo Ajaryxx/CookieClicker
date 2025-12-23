@@ -3,7 +3,7 @@
 
 GUIManager::GUIManager(sf::RenderWindow& window)
 {
-	m_Gui = std::make_shared<tgui::Gui>(window);
+	m_Gui = std::make_unique<tgui::Gui>(window);
 }
 
 GUIManager::~GUIManager()

@@ -3,13 +3,16 @@
 class EventManager
 {
 public:
-	
+	EventManager(tgui::Gui* const gui);
 	~EventManager();
 
-	void UpdateEvents(tgui::Gui& gui);
-private:
-	EventManager();
+	template<typename EVT, typename FUNC>
+	void BindEvent();
 
-	
+
+	void UpdateEvents();
+private:
+
+	tgui::Gui* m_Gui;
 
 };

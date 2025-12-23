@@ -1,15 +1,15 @@
 #include "PCH.hpp"
 #include "Core/EventManager.hpp"
 
-EventManager::EventManager()
+EventManager::EventManager(tgui::Gui* const gui)
 {
-	
+	m_Gui = gui;
 }
 EventManager::~EventManager()
 {
 
 }
-void EventManager::UpdateEvents(tgui::Gui& gui)
+void EventManager::UpdateEvents()
 {
-	gui.handleWindowEvents();
+	
 }

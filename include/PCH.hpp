@@ -6,6 +6,7 @@
 #include <print>
 #include <format>
 #include <unordered_map>
+#include <functional>
 #include <fstream>
 
 #include <SFML/Graphics.hpp>

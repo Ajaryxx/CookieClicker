@@ -1,12 +1,12 @@
 #include "PCH.hpp"
 #include "Core/Application.hpp"
-#include "Core/Window.hpp"
+#include "Core/GameWindow.hpp"
 
 Application::Application(const ApplicationSpecification& specification)
 {
 	app = this;
 	m_specification = specification;
-	m_Window = std::make_unique<Window>(m_specification);
+	m_Window = std::make_unique<GameWindow>(m_specification);
 }
 
 Application::~Application()

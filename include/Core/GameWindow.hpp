@@ -4,20 +4,16 @@
 #include "Core/GUIManager.hpp"
 #include "Core/EventManager.hpp"
 
-class EventManager;
-class GUIManager;
 
-
-
-class Window
+class GameWindow
 {
 public:
-	Window(const ApplicationSpecification& spec);
-	~Window();
+	GameWindow(const ApplicationSpecification& spec);
+	~GameWindow();
 
 
 	void Loop();
-	inline GUIManager* GetGUIManager() const { return m_GUIManager.get(); }
+	inline GUIManager& GetGUIManager() const { return *m_GUIManager; }
 
 private:
 

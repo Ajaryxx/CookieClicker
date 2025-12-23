@@ -1,3 +1,3 @@
 target_sources(${CookieClicker_Exe} PRIVATE 
 "Application.cpp"
-"Window.cpp" "EventManager.cpp" "GUIManager.cpp")
+"GameWindow.cpp" "EventManager.cpp" "GUIManager.cpp")

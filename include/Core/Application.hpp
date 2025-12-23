@@ -1,7 +1,7 @@
 #pragma once
 #include "Core/GameValues.hpp"
 
-class Window;
+class GameWindow;
 
 class Application
 {
@@ -16,12 +16,12 @@ public:
 
 	void Run();
 	void ShutDown();
-	Window* GetWindow() const { return m_Window.get(); }
+	GameWindow& GetWindow() const { return *m_Window; }
 private:
 
 	inline static Application* app = nullptr;
 	ApplicationSpecification m_specification;
 
-	std::unique_ptr<Window> m_Window;
+	std::unique_ptr<GameWindow> m_Window;
 
 };

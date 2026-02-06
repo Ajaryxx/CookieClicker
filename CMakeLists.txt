@@ -7,8 +7,15 @@ LANGUAGES CXX)
 #Proj variables
 set(GAME_EXE "CookieClicker")
 
-#setup EXE Target
+
+#setup EXE Target	
 add_executable(${GAME_EXE} "src/main.cpp")
+
+if(WIN32)
+    target_link_options(${GAME_EXE} PRIVATE
+        "$<$<CONFIG:Release>:/SUBSYSTEM:WINDOWS>"
+    )
+endif()
 
 set_target_properties(${GAME_EXE} PROPERTIES
 CXX_STANDARD 23
@@ -16,7 +23,6 @@ CXX_STANDARD_REQUIRED ON
 CXX_EXTENSIONS OFF)
 
 #fetch needed libraries
-
 include(FetchContent)
 
 FetchContent_Declare(
@@ -41,5 +47,12 @@ FetchContent_MakeAvailable(tgui)
 target_include_directories(${GAME_EXE} PRIVATE "include/")
 target_link_libraries(${GAME_EXE} PRIVATE sfml-graphics sfml-window sfml-audio sfml-system TGUI::TGUI)
 target_precompile_headers(${GAME_EXE} PRIVATE "include/PCH.hpp")
+
+target_compile_definitions(${GAME_EXE} PRIVATE 
+$<$<CONFIG:Debug>:__DEBUG>
+$<$<CONFIG:Release>:__RELEASE>)
+
+target_compile_definitions(${GAME_EXE} PRIVATE SFML_STATIC TGUI_STATIC)
+
 
 add_subdirectory(src)

@@ -41,6 +41,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(sfml)
 set(TGUI_BACKEND "SFML_GRAPHICS")
+set(SFML_DIR ${SFML_SOURCE_DIR})
 FetchContent_MakeAvailable(tgui)
 
 #link with EXE

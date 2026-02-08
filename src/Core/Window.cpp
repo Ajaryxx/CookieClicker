@@ -1,5 +1,6 @@
 #include "PCH.hpp"
 #include "Core/Window.hpp"
+#include "Utility/HelperMacros.hpp"
 
 Window::Window(const WindowParameters& specification)
 {

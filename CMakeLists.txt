@@ -17,6 +17,11 @@ if(WIN32)
     )
 endif()
 
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+target_compile_options(${GAME_EXE} PUBLIC /Zc:preprocessor)
+endif()
+
+
 set_target_properties(${GAME_EXE} PROPERTIES
 CXX_STANDARD 23
 CXX_STANDARD_REQUIRED ON
@@ -39,6 +44,7 @@ FetchContent_Declare(
 )
 #---using imgui for this project?---
 
+set(SFML_BUILD_NETWORK OFF)
 FetchContent_MakeAvailable(sfml)
 set(TGUI_BACKEND "SFML_GRAPHICS")
 set(SFML_DIR ${SFML_SOURCE_DIR})

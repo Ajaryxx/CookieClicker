@@ -1,7 +1,7 @@
 #pragma once
 
 #if defined(__DEBUG)
-	#define CCLOG(message, ...) std::println(message, __VA_ARGS__)
+	#define CCLOG(message, ...) std::println(message __VA_OPT__(,) __VA_ARGS__)
 #else
 	#define CCLOG(message, ...) do { } while(0)
 #endif

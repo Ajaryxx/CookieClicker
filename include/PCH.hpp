@@ -8,9 +8,13 @@
 #include <memory>
 #include <format>
 #include <vector>
+#include <typeindex>
 #include <functional>
+#include <variant>
 #include <optional>
 #include <string>
+#include <unordered_map>
+#include <map>
 #include <string_view>
 #include <cstdint>
 #include <cassert>

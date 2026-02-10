@@ -10,11 +10,10 @@
 	#define ShowMBox(window, message, caption, utype) ShowMessageBox(window, message, caption, utype)
 
 #else
-	//Linux
+	//Linux dummy macro
 	#define ShowMBox(window, message, caption, utype) do { } while(0)
 
 #endif
-
 
 #if defined(_WIN32)
 //WINDOWS ONLY
@@ -24,3 +23,8 @@ inline int ShowMessageBox(HWND window, LPCWSTR message, LPCWSTR caption, UINT ut
 	return MessageBoxW(window, message, caption, utype);
 }
 #endif
+
+
+#define ASSERT(cond, message) assert(cond && message)
+
+#define BASEOF_REQUIRED(Parent, Child, message) static_assert(std::is_base_of<Child, Parent>::value, message)

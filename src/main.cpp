@@ -33,7 +33,6 @@ static bool RunApp(const ApplicationSpecification& spec)
 //Windows(Debug) Linux(Debug, Release)
 int main(int argc, char* argv[])
 {
-	
 #ifdef __DEBUG
 	//DEBUG
 	ApplicationSpecification spec;
@@ -48,8 +47,8 @@ int main(int argc, char* argv[])
 	ApplicationSpecification spec = GetReleaseSpecification();
 
 #endif
-	bool InitSuccsess = RunApp(spec);
 
+	bool InitSuccsess = RunApp(spec);
 
 	return InitSuccsess ? EXIT_SUCCESS : EXIT_FAILURE;
 }
@@ -63,7 +62,4 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	return InitSuccsess ? EXIT_SUCCESS : EXIT_FAILURE;
 }
-
-
 #endif
-

@@ -33,6 +33,7 @@ void Application::TestKeyPress(const sf::Event::KeyPressed& evt)
 	if (evt.code == sf::Keyboard::Key::Enter)
 		CCLOG("ENTER PRESSED");
 }
+
 void Application::Run()
 {
 	m_Window->Loop();

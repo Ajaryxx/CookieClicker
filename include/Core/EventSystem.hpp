@@ -27,10 +27,11 @@ struct Visitor
 		{
 			for (auto& item : it->second)
 			{
-				
-				std::get<EvtWindowClosed>(item)(evt);
-			}
-			
+				if (std::holds_alternative<EvtWindowClosed>(item))
+				{
+					std::get<EvtWindowClosed>(item)(evt);
+				}
+			}			
 		}
 	}
 	void operator()(const sf::Event::KeyPressed& evt)
@@ -41,23 +42,20 @@ struct Visitor
 		{
 			for (auto& item : it->second)
 			{
-				std::get<EvtKeyPressed>(item)(evt);
+				if(std::holds_alternative<EvtKeyPressed>(item))
+				{
+					std::get<EvtKeyPressed>(item)(evt);
+				}
 			}
 
 		}
 	}
 
-
-	void operator()(const sf::Event& evt)
-	{
-		
-	}
+	void operator()(const sf::Event& evt) {	}
 
 	std::unordered_map<Events, std::vector<EventHandler>>& m_map;
 
 };
-
-
 
 class EventSystem
 {
@@ -105,5 +103,4 @@ inline void EventSystem::ListenEvent(Events evt, HANDLER handler)
 	{
 		m_umap_SFMLCommandDispatch[evt].push_back(handler);
 	}
-
 }

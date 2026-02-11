@@ -1,34 +1,39 @@
 #pragma once
 #include "BaseValues.hpp"
-#include "Utility/HelperMacros.hpp"
+#include "Utility/Macros.hpp"
 #include "Core/Window.hpp"
 #include "Core/EventSystem.hpp"
 
-class Application
+namespace CC
 {
-public:
-	Application(const ApplicationSpecification& specification);
-	~Application();
+	class Application
+	{
+	public:
+		Application(const ApplicationSpecification& specification);
+		~Application();
 
-	Application(const Application&) = delete;
-	Application& operator=(const Application&) = delete;
+		Application(const Application&) = delete;
+		Application& operator=(const Application&) = delete;
 
 
-public:
-	inline static Application& Get() { return *m_application; }
+	public:
+		inline static Application& Get() { return *m_application; }
 
-	bool Init();
-	void Run();
+		bool Init();
+		void Run();
 
-private:
-	void CloseApp(const sf::Event::Closed& evt);
-	void TestKeyPress(const sf::Event::KeyPressed& evt);
+	private:
+		void CloseApp(const sf::Event::Closed& evt);
+		void TestKeyPress(const sf::Event::KeyPressed& evt);
+		void TestKeyPress2(const sf::Event::KeyPressed& evt);
 
-private:
-	inline static Application* m_application = nullptr;
-	ApplicationSpecification m_ApplicationSpecification;
+	private:
+		inline static Application* m_application = nullptr;
+		ApplicationSpecification m_ApplicationSpecification;
 
-private:
-	std::unique_ptr<Window> m_Window;
+	private:
+		std::unique_ptr<Window> m_Window;
 
-};
+	};
+}
+

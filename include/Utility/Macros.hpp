@@ -28,3 +28,6 @@ inline int ShowMessageBox(HWND window, LPCWSTR message, LPCWSTR caption, UINT ut
 #define ASSERT(cond, message) assert(cond && message)
 
 #define BASEOF_REQUIRED(Parent, Child, message) static_assert(std::is_base_of<Child, Parent>::value, message)
+
+#define BIND_EVENT_FUNCTION(Class, Func) std::bind(&Class::Func, this, std::placeholders::_1)
+

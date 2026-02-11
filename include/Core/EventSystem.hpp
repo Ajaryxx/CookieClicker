@@ -1,106 +1,116 @@
 #pragma once
+#include "BaseValues.hpp"
+#include "Utilities.hpp"
 
-using EvtWindowClosed = std::function<void(const sf::Event::Closed&)>;
-using EvtKeyPressed = std::function<void(const sf::Event::KeyPressed&)>;
-
-
-using EventHandler = std::variant<
-	EvtWindowClosed,
-	EvtKeyPressed>;
-
-enum Events
-{
-	WINDOW_CLOSE,
-	KEY_PRESSED
-};
-
-struct Visitor
+namespace CC
 {
 
-	Visitor(std::unordered_map<Events, std::vector<EventHandler>>& map) : m_map(map) { }
+	using EvtWindowClosed = std::function<void(const sf::Event::Closed&)>;
+	using EvtKeyPressed = std::function<void(const sf::Event::KeyPressed&)>;
 
-	void operator()(const sf::Event::Closed& evt)
+
+	using EventHandler = std::variant<
+		EvtWindowClosed,
+		EvtKeyPressed>;
+
+	enum EventType
 	{
-		auto it = m_map.find(Events::WINDOW_CLOSE);
+		WINDOW_CLOSE,
+		KEY_PRESSED
+	};
 
-		if (it != m_map.end())
+	struct Visitor
+	{
+
+		Visitor(std::unordered_map<EventType, std::vector<EventHandleID>>& EventHandleIDMap,
+			std::unordered_map<EventHandleID, EventHandler>& EventHandlerMap) : m_mapping(EventHandleIDMap), m_umap_SFMLCommandDispatch(EventHandlerMap) {}
+
+		void operator()(const sf::Event::Closed& evt)
 		{
-			for (auto& item : it->second)
-			{
-				if (std::holds_alternative<EvtWindowClosed>(item))
-				{
-					std::get<EvtWindowClosed>(item)(evt);
-				}
-			}			
+			FireEvent<EvtWindowClosed>(EventType::WINDOW_CLOSE, evt);
 		}
-	}
-	void operator()(const sf::Event::KeyPressed& evt)
-	{
-		auto it = m_map.find(Events::KEY_PRESSED);
-
-		if (it != m_map.end())
+		void operator()(const sf::Event::KeyPressed& evt)
 		{
-			for (auto& item : it->second)
+			FireEvent<EvtKeyPressed>(EventType::KEY_PRESSED, evt);
+		}
+
+		void operator()(const sf::Event& evt) {}
+
+
+		template<typename T, typename SF_EVT> 
+		void FireEvent(EventType type, const SF_EVT& evt)
+		{
+			auto itMappping = m_mapping.find(type);
+
+			if (itMappping != m_mapping.end())
 			{
-				if(std::holds_alternative<EvtKeyPressed>(item))
+				for (const auto& item : itMappping->second)
 				{
-					std::get<EvtKeyPressed>(item)(evt);
+					auto itEventHandler = m_umap_SFMLCommandDispatch.find(item);
+
+					if (itEventHandler != m_umap_SFMLCommandDispatch.end())
+					{
+						if (T* func = std::get_if<T>(&itEventHandler->second))
+						{
+							(*func)(evt);
+						}
+					}
 				}
 			}
-
 		}
-	}
 
-	void operator()(const sf::Event& evt) {	}
+		std::unordered_map<EventType, std::vector<EventHandleID>> m_mapping;
+		std::unordered_map<EventHandleID, EventHandler> m_umap_SFMLCommandDispatch;
 
-	std::unordered_map<Events, std::vector<EventHandler>>& m_map;
+	};
 
-};
-
-class EventSystem
-{
-public:
-
-	~EventSystem();
-	EventSystem(const EventSystem&) = delete;
-	EventSystem& operator=(const EventSystem&) = delete;
-
-	inline static EventSystem& Get()
+	class EventSystem
 	{
-		static EventSystem system;
-		return system;
-	}
+	public:
 
-	void UpdateEvents(const std::optional<sf::Event>& evt);
+		~EventSystem();
+		EventSystem(const EventSystem&) = delete;
+		EventSystem& operator=(const EventSystem&) = delete;
 
-	template<typename HANDLER>
-	void ListenEvent(Events evt, HANDLER handler);
+		inline static EventSystem& Get()
+		{
+			static EventSystem system;
+			return system;
+		}
 
-private:
-	EventSystem();
-	void Notify();
-
-
-private:
-	//SFML events
-	std::unordered_map<Events, std::vector<EventHandler>> m_umap_SFMLCommandDispatch;
+		void UpdateEvents(const std::optional<sf::Event>& evt);
 
 
-	std::optional<sf::Event> m_Event;
+		template<typename FUNC>
+		[[nodiscard]] void Subscribe(EventType evt, EventHandleID& handleID, FUNC handler);
 
-};
+		void Unsubscribe(EventHandleID& handle);
+	private:
+		EventSystem();
+		void Notify();
 
-template<typename HANDLER>
-inline void EventSystem::ListenEvent(Events evt, HANDLER handler)
-{
-	auto it = m_umap_SFMLCommandDispatch.find(evt);
-	
-	if (it != m_umap_SFMLCommandDispatch.end())
+		bool ValidHandle(EventType evt, EventHandleID& handleID);
+
+	private:
+		//SFML events
+		std::unordered_map<EventType, std::vector<EventHandleID>> m_mapping;
+		std::unordered_map<EventHandleID, EventHandler> m_umap_SFMLCommandDispatch;
+
+
+		std::optional<sf::Event> m_Event;
+
+	};
+
+	template<typename FUNC>
+	inline void EventSystem::Subscribe(EventType evt, EventHandleID& handleID, FUNC handler)
 	{
-		it->second.push_back(handler);
+		do
+		{
+			handleID = Utility::GenRandomInt32(0, INT32_MAX);
+		} while (!ValidHandle(evt, handleID));
+
+		m_mapping[evt].push_back(handleID);
+		m_umap_SFMLCommandDispatch[handleID] = handler;
 	}
-	else
-	{
-		m_umap_SFMLCommandDispatch[evt].push_back(handler);
-	}
+
 }

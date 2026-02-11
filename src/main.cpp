@@ -2,7 +2,7 @@
 #include "Core/Application.hpp"
 #include "Core/Window.hpp"
 
-
+using namespace CC;
 
 static ApplicationSpecification GetReleaseSpecification()
 {

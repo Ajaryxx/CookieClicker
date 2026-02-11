@@ -1,6 +1,8 @@
 #include "PCH.hpp"
 #include "Core/Window.hpp"
-#include "Utility/HelperMacros.hpp"
+#include "Utility/Macros.hpp"
+
+using namespace CC;
 
 Window::Window(const WindowParameters& specification, std::function<void(const std::optional<sf::Event>&)> EventUpdateFunc)
 {

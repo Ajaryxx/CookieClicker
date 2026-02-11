@@ -1,6 +1,8 @@
 #include "PCH.hpp"
 #include "Core/Application.hpp"
 
+using namespace CC;
+
 Application::Application(const ApplicationSpecification& specification)
 {
 	this->m_ApplicationSpecification = specification;
@@ -19,8 +21,18 @@ bool Application::Init()
 	m_Window = std::make_unique<Window>(m_ApplicationSpecification.windowSettings, std::function<void(const std::optional<sf::Event>&)>(boundFunc));
 	CCLOG("Application Initialized Successfully!\n");
 	
-	EventSystem::Get().ListenEvent(Events::WINDOW_CLOSE, std::bind(&Application::CloseApp, this, std::placeholders::_1));
-	EventSystem::Get().ListenEvent(Events::KEY_PRESSED, std::bind(&Application::TestKeyPress, this, std::placeholders::_1));
+	EventHandleID closehandle;
+	EventHandleID key1;
+	EventHandleID key2;
+	EventSystem::Get().Subscribe(EventType::WINDOW_CLOSE, closehandle, BIND_EVENT_FUNCTION(Application, CloseApp));
+	EventSystem::Get().Subscribe(EventType::KEY_PRESSED, key1, BIND_EVENT_FUNCTION(Application, TestKeyPress));
+	EventSystem::Get().Subscribe(EventType::KEY_PRESSED, key1, BIND_EVENT_FUNCTION(Application, TestKeyPress2));
+	
+
+	
+	EventSystem::Get().Unsubscribe(key1);
+	EventSystem::Get().Unsubscribe(key2);
+	
 
 	return true;
 }
@@ -32,6 +44,11 @@ void Application::TestKeyPress(const sf::Event::KeyPressed& evt)
 {
 	if (evt.code == sf::Keyboard::Key::Enter)
 		CCLOG("ENTER PRESSED");
+}
+void Application::TestKeyPress2(const sf::Event::KeyPressed& evt)
+{
+	if (evt.code == sf::Keyboard::Key::Enter)
+		CCLOG("ENTER PRESSED 2");
 }
 
 void Application::Run()

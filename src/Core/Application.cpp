@@ -28,7 +28,7 @@ bool Application::Init()
 	EventSystem::Get().Subscribe(EventType::KEY_PRESSED, key1, BIND_EVENT_FUNCTION(Application, TestKeyPress));
 	EventSystem::Get().Subscribe(EventType::KEY_PRESSED, key1, BIND_EVENT_FUNCTION(Application, TestKeyPress2));
 	
-
+		
 	
 	EventSystem::Get().Unsubscribe(key1);
 	EventSystem::Get().Unsubscribe(key2);

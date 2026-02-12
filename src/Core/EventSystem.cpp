@@ -1,58 +1,62 @@
 #include "PCH.hpp"
 #include "Core/EventSystem.hpp"
 
-using namespace CC;
 
-EventSystem::EventSystem()
+CC::EventSystem::EventSystem()
 {
 
 }
 
-EventSystem::~EventSystem()
+CC::EventSystem::~EventSystem()
 {
 }
 
-void EventSystem::UpdateEvents(const std::optional<sf::Event>& evt)
+void CC::EventSystem::UpdateEvents(const std::optional<sf::Event>& evt)
 {
 	m_Event = evt;
 	Notify();
 }
-void EventSystem::Notify()
+void CC::EventSystem::Notify()
 {
-	m_Event->visit(Visitor(m_mapping, m_umap_SFMLCommandDispatch));
+	m_Event->visit(Visitor(m_umap_Mapping, m_umap_SFMLCommandDispatch));
 }
-void EventSystem::Unsubscribe(EventHandleID& handle)
+void CC::EventSystem::Unsubscribe(EventHandleID& handle)
 {
-	//TODO: Fix this
+	bool IsValidMappingID = false;
+	auto ItMapping = m_umap_Mapping.begin();
+	std::vector<EventHandleID>::iterator MappingVecDelPos;
 
-	for (auto ItMapping = m_mapping.begin(); ItMapping != m_mapping.end(); ItMapping++)
+	for (; ItMapping != m_umap_Mapping.end(); ItMapping++)
 	{
-		bool found = false;
-		for (const auto& item : ItMapping->second)
+		auto& vec = ItMapping->second;
+		for (auto ItHandleIDVec = vec.begin(); ItHandleIDVec != vec.end(); ItHandleIDVec++)
 		{
-			if (item == handle)
+			if (*ItHandleIDVec == handle)
 			{
-				found = true;
+				IsValidMappingID = true;
+				MappingVecDelPos = ItHandleIDVec;
 				break;
 			}
 				
 		}
-		if (found)
+		if (IsValidMappingID)
 			break;
 	}
 	auto ItSFML = m_umap_SFMLCommandDispatch.find(handle);
+	bool IsValidPos = ItSFML != m_umap_SFMLCommandDispatch.end();
 
-	if (ItSFML != m_umap_SFMLCommandDispatch.end())
+	if (IsValidPos && IsValidMappingID)
 	{
+		ItMapping->second.erase(MappingVecDelPos);
 		m_umap_SFMLCommandDispatch.erase(ItSFML);
+		CCLOG("Event ID successfully deleted: {}", handle);
+		handle = -1;
 	}
-
-	handle = -1;
 }
-bool CC::EventSystem::ValidHandle(EventType evt, EventHandleID& handleID)
+bool CC::EventSystem::IsValidEventID(EventType evt, EventHandleID& handleID)
 {
-	auto it = m_mapping.find(evt);
-	if (it != m_mapping.end())
+	auto it = m_umap_Mapping.find(evt);
+	if (it != m_umap_Mapping.end())
 	{
 		for (const auto& item : it->second)
 		{

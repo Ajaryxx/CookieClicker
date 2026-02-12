@@ -23,7 +23,7 @@ namespace CC
 	{
 
 		Visitor(std::unordered_map<EventType, std::vector<EventHandleID>>& EventHandleIDMap,
-			std::unordered_map<EventHandleID, EventHandler>& EventHandlerMap) : m_mapping(EventHandleIDMap), m_umap_SFMLCommandDispatch(EventHandlerMap) {}
+			std::unordered_map<EventHandleID, EventHandler>& EventHandlerMap) : m_umap_Mapping(EventHandleIDMap), m_umap_SFMLCommandDispatch(EventHandlerMap) {}
 
 		void operator()(const sf::Event::Closed& evt)
 		{
@@ -40,14 +40,14 @@ namespace CC
 		template<typename T, typename SF_EVT> 
 		void FireEvent(EventType type, const SF_EVT& evt)
 		{
-			auto itMappping = m_mapping.find(type);
+			auto itMappping = m_umap_Mapping.find(type);
 
-			if (itMappping != m_mapping.end())
+			if (itMappping != m_umap_Mapping.end())
 			{
 				for (const auto& item : itMappping->second)
 				{
 					auto itEventHandler = m_umap_SFMLCommandDispatch.find(item);
-
+					
 					if (itEventHandler != m_umap_SFMLCommandDispatch.end())
 					{
 						if (T* func = std::get_if<T>(&itEventHandler->second))
@@ -59,7 +59,7 @@ namespace CC
 			}
 		}
 
-		std::unordered_map<EventType, std::vector<EventHandleID>> m_mapping;
+		std::unordered_map<EventType, std::vector<EventHandleID>> m_umap_Mapping;
 		std::unordered_map<EventHandleID, EventHandler> m_umap_SFMLCommandDispatch;
 
 	};
@@ -89,11 +89,11 @@ namespace CC
 		EventSystem();
 		void Notify();
 
-		bool ValidHandle(EventType evt, EventHandleID& handleID);
+		bool IsValidEventID(EventType evt, EventHandleID& handleID);
 
 	private:
 		//SFML events
-		std::unordered_map<EventType, std::vector<EventHandleID>> m_mapping;
+		std::unordered_map<EventType, std::vector<EventHandleID>> m_umap_Mapping;
 		std::unordered_map<EventHandleID, EventHandler> m_umap_SFMLCommandDispatch;
 
 
@@ -104,12 +104,18 @@ namespace CC
 	template<typename FUNC>
 	inline void EventSystem::Subscribe(EventType evt, EventHandleID& handleID, FUNC handler)
 	{
+		if (!IsValidEventID(evt, handleID))
+		{
+			CCLOG("You are trying to override an existing handle! [HandleID: {}]", handleID);
+			return;
+		}
+
 		do
 		{
 			handleID = Utility::GenRandomInt32(0, INT32_MAX);
-		} while (!ValidHandle(evt, handleID));
+		} while (!IsValidEventID(evt, handleID));
 
-		m_mapping[evt].push_back(handleID);
+		m_umap_Mapping[evt].push_back(handleID);
 		m_umap_SFMLCommandDispatch[handleID] = handler;
 	}
 

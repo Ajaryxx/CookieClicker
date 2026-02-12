@@ -79,33 +79,33 @@ namespace CC
 			return system;
 		}
 
+		inline std::optional<sf::Event> GetEvent() const { return m_Event; }
 		void UpdateEvents(const std::optional<sf::Event>& evt);
-
 		//Subscribe to an SFML Event
 		template<typename FUNC>
 		void Subscribe(EventType evt, EventHandleID& handleID, FUNC handler);
 		//Subscribe to a custom event
 		template<typename FUNC>
 		void Subscribe(const std::string& eventName, EventHandleID& handlerID, FUNC handler);
-
 		//Create a custom event
-		void CreateCustomEvent(const std::string& eventName, EventHandleID& handleID);
-
-		void Unsubscribe(EventHandleID& handle);
-
+		void CreateCustomEvent(const std::string& eventName);
+		//Unsubscribe an event(SFML and custom)
+		void Unsubscribe(EventHandleID& handleID);
+		//Notifys all the functions that are bound to this event
 		void CustomNotify(const std::string& customEventName);
+		
 	private:
 		EventSystem();
-
+		//Notifys SFML events
 		void Notify();
-		bool IsValidEventID(EventHandleID& handleID) const;
+		bool IsValidEventID(EventHandleID handleID) const;
 		bool IsCustomEventNameValid(const std::string& name) const;
 		EventHandleID GenerateValidHandlerID() const;
+
 	private:
 		
 		std::unordered_map<std::variant<EventType, std::string>, std::vector<EventHandleID>> m_umap_Mapping;
 		std::unordered_map<EventHandleID, EventHandler> m_umap_EventDispatch;
-
 
 		std::optional<sf::Event> m_Event;
 
@@ -116,12 +116,12 @@ namespace CC
 	{
 		if (!IsValidEventID(handleID))
 		{
-			CCLOG("You are trying to override an existing handle! [HandleID: {}; EventType: {}]", handleID, (uint8)evt);
+			CCLOG("You are trying to override an existing handle! HandleID: {}; EventType: {}", handleID, (uint8)evt);
 			return;
 		}
 		
 		handleID = GenerateValidHandlerID();
-
+		//link handlerID with event and function
 		m_umap_Mapping[evt].push_back(handleID);
 		m_umap_EventDispatch[handleID] = handler;
 
@@ -139,8 +139,8 @@ namespace CC
 		handlerID = GenerateValidHandlerID();
 
 		auto it = m_umap_Mapping.find(eventName);
+		//link handlerID with event and function
 		it->second.push_back(handlerID);
-
 		m_umap_EventDispatch[handlerID] = std::function<void()>(handler);
 
 		CCLOG("Subscribed to custom event: {}", eventName);

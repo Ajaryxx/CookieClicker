@@ -28,19 +28,19 @@ bool Application::Init()
 	EventSystem::Get().Subscribe(EventType::KEY_PRESSED, key1, BIND_EVENT_FUNCTION(Application, TestKeyPress));
 	//EventSystem::Get().Subscribe(EventType::KEY_PRESSED, key1, BIND_EVENT_FUNCTION(Application, TestKeyPress2));
 	
-	EventHandleID notifyID;
-	EventSystem::Get().CreateCustomEvent("TEST", notifyID);
+	EventSystem::Get().CreateCustomEvent("TEST");
+	EventSystem::Get().CreateCustomEvent("TEST2");
 
 	EventHandleID customCall;
 	EventHandleID customCall2;
 	EventSystem::Get().Subscribe("TEST", customCall, BIND_CUSTOM_EVENT_FUNCTION(Application, CustomEvent));
-	EventSystem::Get().Subscribe("TEST", customCall2, BIND_CUSTOM_EVENT_FUNCTION(Application, CustomEvent2));
+	EventSystem::Get().Subscribe("TEST2", customCall2, BIND_CUSTOM_EVENT_FUNCTION(Application, CustomEvent2));
 
+	EventSystem::Get().Unsubscribe(customCall2);
 	EventSystem::Get().CustomNotify("TEST");
-	EventSystem::Get().Unsubscribe(customCall);
-	EventSystem::Get().CustomNotify("TEST");
+	
 
-	//EventSystem::Get().Unsubscribe(key1);
+
 	//EventSystem::Get().Unsubscribe(key1);
 	
 

@@ -18,7 +18,8 @@ void CC::EventSystem::UpdateEvents(const std::optional<sf::Event>& evt)
 }
 void CC::EventSystem::Notify()
 {
-	m_Event->visit(Visitor(m_umap_Mapping, m_umap_EventDispatch));
+	if(m_Event.has_value())
+		m_Event->visit(Visitor(m_umap_Mapping, m_umap_EventDispatch));
 }
 void CC::EventSystem::CustomNotify(const std::string& customEventName)
 {
@@ -28,6 +29,7 @@ void CC::EventSystem::CustomNotify(const std::string& customEventName)
 	{
 		for (const auto& item : it->second)
 		{
+			//call every function in EvtDisp that is bound to that ID
 			auto ItEvtDisp = m_umap_EventDispatch.find(item);
 			if (ItEvtDisp != m_umap_EventDispatch.end())
 			{
@@ -39,7 +41,7 @@ void CC::EventSystem::CustomNotify(const std::string& customEventName)
 		}
 	}
 }
-void CC::EventSystem::Unsubscribe(EventHandleID& handle)
+void CC::EventSystem::Unsubscribe(EventHandleID& handleID)
 {
 	bool IsValidMappingID = false;
 	auto ItMapping = m_umap_Mapping.begin();
@@ -50,7 +52,7 @@ void CC::EventSystem::Unsubscribe(EventHandleID& handle)
 		auto& vec = ItMapping->second;
 		for (auto ItHandleIDVec = vec.begin(); ItHandleIDVec != vec.end(); ItHandleIDVec++)
 		{
-			if (*ItHandleIDVec == handle)
+			if (*ItHandleIDVec == handleID)
 			{
 				IsValidMappingID = true;
 				MappingVecDelPos = ItHandleIDVec;
@@ -61,20 +63,20 @@ void CC::EventSystem::Unsubscribe(EventHandleID& handle)
 		if (IsValidMappingID)
 			break;
 	}
-	auto ItSFML = m_umap_EventDispatch.find(handle);
+	auto ItSFML = m_umap_EventDispatch.find(handleID);
 	bool IsValidPos = ItSFML != m_umap_EventDispatch.end();
 
 	if (IsValidPos && IsValidMappingID)
 	{
 		ItMapping->second.erase(MappingVecDelPos);
 		m_umap_EventDispatch.erase(ItSFML);
-		CCLOG("Event ID successfully deleted: {}", handle);
-		handle = -1;
+		CCLOG("Event ID successfully deleted: {}", handleID);
+		handleID = -1;
 	}
 	else
-		CCLOG("Event ID was invalid. Handle: {}", handle);
+		CCLOG("Event ID was invalid. Handle: {}", handleID);
 }
-bool CC::EventSystem::IsValidEventID(EventHandleID& handleID) const
+bool CC::EventSystem::IsValidEventID(EventHandleID handleID) const
 {
 	for (auto it = m_umap_Mapping.cbegin(); it != m_umap_Mapping.cend(); it++)
 	{	
@@ -99,7 +101,7 @@ bool CC::EventSystem::IsCustomEventNameValid(const std::string& name) const
 	auto it = m_umap_Mapping.find(name);
 	return it != m_umap_Mapping.end();
 }
-void CC::EventSystem::CreateCustomEvent(const std::string& eventName, EventHandleID& handleID)
+void CC::EventSystem::CreateCustomEvent(const std::string& eventName)
 {
 	auto it = m_umap_Mapping.find(eventName);
 
@@ -108,9 +110,7 @@ void CC::EventSystem::CreateCustomEvent(const std::string& eventName, EventHandl
 		CCLOG("Custom event already exits! Event Name: {}", eventName);
 		return;
 	}
-	handleID = GenerateValidHandlerID();
-
-	
+	//We only want to define the new custom event. Handlers will be bound to that custom event
 	m_umap_Mapping[eventName];
 
 	CCLOG("Custom event created with name: {}", eventName);

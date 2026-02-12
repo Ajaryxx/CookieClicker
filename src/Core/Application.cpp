@@ -26,12 +26,22 @@ bool Application::Init()
 	EventHandleID key2;
 	EventSystem::Get().Subscribe(EventType::WINDOW_CLOSE, closehandle, BIND_EVENT_FUNCTION(Application, CloseApp));
 	EventSystem::Get().Subscribe(EventType::KEY_PRESSED, key1, BIND_EVENT_FUNCTION(Application, TestKeyPress));
-	EventSystem::Get().Subscribe(EventType::KEY_PRESSED, key1, BIND_EVENT_FUNCTION(Application, TestKeyPress2));
+	//EventSystem::Get().Subscribe(EventType::KEY_PRESSED, key1, BIND_EVENT_FUNCTION(Application, TestKeyPress2));
 	
-		
-	
-	EventSystem::Get().Unsubscribe(key1);
-	EventSystem::Get().Unsubscribe(key2);
+	EventHandleID notifyID;
+	EventSystem::Get().CreateCustomEvent("TEST", notifyID);
+
+	EventHandleID customCall;
+	EventHandleID customCall2;
+	EventSystem::Get().Subscribe("TEST", customCall, BIND_CUSTOM_EVENT_FUNCTION(Application, CustomEvent));
+	EventSystem::Get().Subscribe("TEST", customCall2, BIND_CUSTOM_EVENT_FUNCTION(Application, CustomEvent2));
+
+	EventSystem::Get().CustomNotify("TEST");
+	EventSystem::Get().Unsubscribe(customCall);
+	EventSystem::Get().CustomNotify("TEST");
+
+	//EventSystem::Get().Unsubscribe(key1);
+	//EventSystem::Get().Unsubscribe(key1);
 	
 
 	return true;
@@ -50,7 +60,14 @@ void Application::TestKeyPress2(const sf::Event::KeyPressed& evt)
 	if (evt.code == sf::Keyboard::Key::Enter)
 		CCLOG("ENTER PRESSED 2");
 }
-
+void Application::CustomEvent()
+{
+	CCLOG("CUSTOM EVENT");
+}
+void Application::CustomEvent2()
+{
+	CCLOG("CUSTOM EVENT2");
+}
 void Application::Run()
 {
 	m_Window->Loop();

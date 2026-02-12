@@ -31,3 +31,5 @@ inline int ShowMessageBox(HWND window, LPCWSTR message, LPCWSTR caption, UINT ut
 
 #define BIND_EVENT_FUNCTION(Class, Func) std::bind(&Class::Func, this, std::placeholders::_1)
 
+#define BIND_CUSTOM_EVENT_FUNCTION(Class, Func) std::bind(&Class::Func, this)
+

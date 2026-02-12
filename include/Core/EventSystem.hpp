@@ -4,16 +4,17 @@
 
 namespace CC
 {
-
+	using EvtCustomEvent = std::function<void()>;
 	using EvtWindowClosed = std::function<void(const sf::Event::Closed&)>;
 	using EvtKeyPressed = std::function<void(const sf::Event::KeyPressed&)>;
 
 
 	using EventHandler = std::variant<
+		EvtCustomEvent,
 		EvtWindowClosed,
 		EvtKeyPressed>;
 
-	enum EventType
+	enum EventType : uint8
 	{
 		WINDOW_CLOSE,
 		KEY_PRESSED
@@ -22,8 +23,8 @@ namespace CC
 	struct Visitor
 	{
 
-		Visitor(std::unordered_map<EventType, std::vector<EventHandleID>>& EventHandleIDMap,
-			std::unordered_map<EventHandleID, EventHandler>& EventHandlerMap) : m_umap_Mapping(EventHandleIDMap), m_umap_SFMLCommandDispatch(EventHandlerMap) {}
+		Visitor(std::unordered_map<std::variant<EventType, std::string>, std::vector<EventHandleID>>& EventHandleIDMap,
+			std::unordered_map<EventHandleID, EventHandler>& EventHandlerMap) : m_mapEventHandleIDMap(EventHandleIDMap), m_umap_EventDispatch(EventHandlerMap) {}
 
 		void operator()(const sf::Event::Closed& evt)
 		{
@@ -40,15 +41,15 @@ namespace CC
 		template<typename T, typename SF_EVT> 
 		void FireEvent(EventType type, const SF_EVT& evt)
 		{
-			auto itMappping = m_umap_Mapping.find(type);
-
-			if (itMappping != m_umap_Mapping.end())
+			auto itMappping = m_mapEventHandleIDMap.find(type);
+			
+			if (itMappping != m_mapEventHandleIDMap.end())
 			{
 				for (const auto& item : itMappping->second)
 				{
-					auto itEventHandler = m_umap_SFMLCommandDispatch.find(item);
+					auto itEventHandler = m_umap_EventDispatch.find(item);
 					
-					if (itEventHandler != m_umap_SFMLCommandDispatch.end())
+					if (itEventHandler != m_umap_EventDispatch.end())
 					{
 						if (T* func = std::get_if<T>(&itEventHandler->second))
 						{
@@ -59,8 +60,8 @@ namespace CC
 			}
 		}
 
-		std::unordered_map<EventType, std::vector<EventHandleID>> m_umap_Mapping;
-		std::unordered_map<EventHandleID, EventHandler> m_umap_SFMLCommandDispatch;
+		std::unordered_map<std::variant<EventType, std::string>, std::vector<EventHandleID>> m_mapEventHandleIDMap;
+		std::unordered_map<EventHandleID, EventHandler> m_umap_EventDispatch;
 
 	};
 
@@ -80,21 +81,30 @@ namespace CC
 
 		void UpdateEvents(const std::optional<sf::Event>& evt);
 
-
+		//Subscribe to an SFML Event
 		template<typename FUNC>
-		[[nodiscard]] void Subscribe(EventType evt, EventHandleID& handleID, FUNC handler);
+		void Subscribe(EventType evt, EventHandleID& handleID, FUNC handler);
+		//Subscribe to a custom event
+		template<typename FUNC>
+		void Subscribe(const std::string& eventName, EventHandleID& handlerID, FUNC handler);
+
+		//Create a custom event
+		void CreateCustomEvent(const std::string& eventName, EventHandleID& handleID);
 
 		void Unsubscribe(EventHandleID& handle);
+
+		void CustomNotify(const std::string& customEventName);
 	private:
 		EventSystem();
+
 		void Notify();
-
-		bool IsValidEventID(EventType evt, EventHandleID& handleID);
-
+		bool IsValidEventID(EventHandleID& handleID) const;
+		bool IsCustomEventNameValid(const std::string& name) const;
+		EventHandleID GenerateValidHandlerID() const;
 	private:
-		//SFML events
-		std::unordered_map<EventType, std::vector<EventHandleID>> m_umap_Mapping;
-		std::unordered_map<EventHandleID, EventHandler> m_umap_SFMLCommandDispatch;
+		
+		std::unordered_map<std::variant<EventType, std::string>, std::vector<EventHandleID>> m_umap_Mapping;
+		std::unordered_map<EventHandleID, EventHandler> m_umap_EventDispatch;
 
 
 		std::optional<sf::Event> m_Event;
@@ -104,19 +114,36 @@ namespace CC
 	template<typename FUNC>
 	inline void EventSystem::Subscribe(EventType evt, EventHandleID& handleID, FUNC handler)
 	{
-		if (!IsValidEventID(evt, handleID))
+		if (!IsValidEventID(handleID))
 		{
-			CCLOG("You are trying to override an existing handle! [HandleID: {}]", handleID);
+			CCLOG("You are trying to override an existing handle! [HandleID: {}; EventType: {}]", handleID, (uint8)evt);
 			return;
 		}
-
-		do
-		{
-			handleID = Utility::GenRandomInt32(0, INT32_MAX);
-		} while (!IsValidEventID(evt, handleID));
+		
+		handleID = GenerateValidHandlerID();
 
 		m_umap_Mapping[evt].push_back(handleID);
-		m_umap_SFMLCommandDispatch[handleID] = handler;
+		m_umap_EventDispatch[handleID] = handler;
+
+		CCLOG("Event subscribed. Handle was bound to: {}", handleID);
+	}
+
+	template<typename FUNC>
+	inline void EventSystem::Subscribe(const std::string& eventName, EventHandleID& handlerID, FUNC handler)
+	{
+		if (!IsCustomEventNameValid(eventName) || !IsValidEventID(handlerID))
+		{
+			CCLOG("Couldnt find event with name: {} OR you were trying to override the handlerID: {}", eventName, handlerID);
+			return;
+		}
+		handlerID = GenerateValidHandlerID();
+
+		auto it = m_umap_Mapping.find(eventName);
+		it->second.push_back(handlerID);
+
+		m_umap_EventDispatch[handlerID] = std::function<void()>(handler);
+
+		CCLOG("Subscribed to custom event: {}", eventName);
 	}
 
 }

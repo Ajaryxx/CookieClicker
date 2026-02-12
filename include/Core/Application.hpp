@@ -26,6 +26,8 @@ namespace CC
 		void CloseApp(const sf::Event::Closed& evt);
 		void TestKeyPress(const sf::Event::KeyPressed& evt);
 		void TestKeyPress2(const sf::Event::KeyPressed& evt);
+		void CustomEvent();
+		void CustomEvent2();
 
 	private:
 		inline static Application* m_application = nullptr;

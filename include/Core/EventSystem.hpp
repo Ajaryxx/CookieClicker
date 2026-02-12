@@ -143,7 +143,7 @@ namespace CC
 		it->second.push_back(handlerID);
 		m_umap_EventDispatch[handlerID] = std::function<void()>(handler);
 
-		CCLOG("Subscribed to custom event: {}", eventName);
+		CCLOG("Subscribed to custom event: {}; HandleID: {}", eventName, handlerID);
 	}
 
 }

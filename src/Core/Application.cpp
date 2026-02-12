@@ -32,13 +32,13 @@ bool Application::Init()
 	EventSystem::Get().CreateCustomEvent("TEST2");
 
 	EventHandleID customCall;
-	EventHandleID customCall2;
+	EventHandleID customCall2 = 0;
 	EventSystem::Get().Subscribe("TEST", customCall, BIND_CUSTOM_EVENT_FUNCTION(Application, CustomEvent));
-	EventSystem::Get().Subscribe("TEST2", customCall2, BIND_CUSTOM_EVENT_FUNCTION(Application, CustomEvent2));
+	EventSystem::Get().Subscribe("TEST", customCall2, BIND_CUSTOM_EVENT_FUNCTION(Application, CustomEvent2));
 
 	EventSystem::Get().Unsubscribe(customCall2);
 	EventSystem::Get().CustomNotify("TEST");
-	
+	CCLOG("ID IS: {}", customCall2);
 
 
 	//EventSystem::Get().Unsubscribe(key1);

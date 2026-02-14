@@ -2,6 +2,17 @@
 #include "Core/LayerManager.hpp"
 #include "Core/Layer.hpp"
 
+const CC::Layer& CC::LayerManager::GetLayer(const std::string& LayerName) const
+{
+	auto it = std::find_if(m_vecLayers.begin(), m_vecLayers.end(), [&](const LayerSpecification& spec) { return spec.layer->GetLayerName() == LayerName; });
+	if (it != m_vecLayers.end())
+	{
+		return *it->layer;
+	}
+	else
+		CCLOG("Layer: {} not found!", LayerName.c_str());
+}
+
 void CC::LayerManager::PushLayer(const std::string& LayerName, uint8 zOrder)
 {
 	LayerSpecification spec{};

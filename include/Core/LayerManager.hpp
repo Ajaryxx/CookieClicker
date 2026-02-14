@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseValues.hpp"
 
+
 namespace CC
 {
 	class Layer;
@@ -18,6 +19,8 @@ namespace CC
 		LayerManager() = default;
 		~LayerManager() = default;
 
+		inline const std::vector<LayerSpecification>& GetLayers() { return m_vecLayers; }
+		const Layer& GetLayer(const std::string& LayerName) const;
 
 	//protected:
 		void PushLayer(const std::string& LayerName, uint8 zOrder);

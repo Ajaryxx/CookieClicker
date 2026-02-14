@@ -15,17 +15,10 @@ static ApplicationSpecification GetReleaseSpecification()
 	return spec;
 }
 
-static bool RunApp(const ApplicationSpecification& spec)
+static void RunApp(const ApplicationSpecification& spec)
 {
 	Application app(spec);
-	const bool InitSuccsess = app.Init();
-
-	if (InitSuccsess)
-	{
-		app.Get().Run();
-	}
-
-	return InitSuccsess;
+	app.Get().Run();
 }
 
 #if (defined(_WIN32) && defined(__DEBUG)) || defined(__linux__)
@@ -48,9 +41,9 @@ int main(int argc, char* argv[])
 
 #endif
 
-	bool InitSuccsess = RunApp(spec);
+	RunApp(spec);
 
-	return InitSuccsess ? EXIT_SUCCESS : EXIT_FAILURE;
+	return EXIT_SUCCESS;
 }
 
 //Windows
@@ -58,8 +51,8 @@ int main(int argc, char* argv[])
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
 	//RELEASE
-	bool InitSuccsess = RunApp(GetReleaseSpecification());
+	RunApp(GetReleaseSpecification());
 
-	return InitSuccsess ? EXIT_SUCCESS : EXIT_FAILURE;
+	return EXIT_SUCCESS;
 }
 #endif

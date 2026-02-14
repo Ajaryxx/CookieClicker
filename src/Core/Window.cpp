@@ -1,11 +1,12 @@
 #include "PCH.hpp"
 #include "Core/Window.hpp"
-#include "Game/GameManager.hpp"
 #include "Core/GUIManager.hpp"
+#include "Core/EventSystem.hpp"
+
 
 using namespace CC;
 
-Window::Window(const WindowParameters& specification, std::function<void(const std::optional<sf::Event>&)> EventUpdateFunc)
+Window::Window(const WindowParameters& specification)
 {
 	m_Specification = specification;
 
@@ -16,50 +17,34 @@ Window::Window(const WindowParameters& specification, std::function<void(const s
 		m_Specification.state,
 		m_Specification.ContextSettings);
 
-
 	m_Window.setVerticalSyncEnabled(m_Specification.vSync);
 	m_Window.setFramerateLimit(m_Specification.fpsLimit);
 
-	CCASSERT(EventUpdateFunc, "EVENT_UPDATE_FUNC HAS TO BE A VALID PTR");
-	m_EventUpdateFunc = EventUpdateFunc;
-
-	GUIManager::Get().InitGUIManager(m_Window);
+	m_GUIManager = std::make_unique<GUIManager>(m_Window);
 
 }
 Window::~Window()
 {
 }
 
-void Window::Loop()
+void CC::Window::PollEvents()
 {
-	tgui::Gui gui(m_Window);
-	sf::Clock clock;
-	Game::GameManager& GManager = Game::GameManager::Get();
-
-	while (m_Window.isOpen())
+	std::optional<sf::Event> evt = m_Window.pollEvent();
+	while(const auto& evt = m_Window.pollEvent())
 	{
-		float deltaTime = clock.restart().asSeconds();
-		while (std::optional<sf::Event> evt = m_Window.pollEvent())
-		{
-			m_EventUpdateFunc(evt);
-		}
-
-		m_Window.clear();
-		GManager.OnUpdate(deltaTime);
-		Render();
-
-
-		m_Window.display();
+		EventSystem::Get().UpdateEvents(evt);
+		m_GUIManager->UpdateGUIEvents(evt);
 	}
 }
-void Window::Close()
+
+void CC::Window::CloseWindow()
 {
 	m_Window.close();
 }
 
-void CC::Window::Render()
+void CC::Window::Render(const std::vector<LayerSpecification>& layers)
 {
-	const std::vector<LayerSpecification>& layers = Game::GameManager::Get().GetCurrentScene()->GetSceneLayers();
+	m_Window.clear();
 
 	for(const auto& layer : layers)
 	{
@@ -69,4 +54,5 @@ void CC::Window::Render()
 		}
 	}
 
+	m_Window.display();
 }

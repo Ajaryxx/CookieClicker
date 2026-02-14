@@ -1,8 +1,7 @@
 #pragma once
-#include "BaseValues.hpp"
-#include "Utility/Macros.hpp"
+#include "Utilities.hpp"
 #include "Core/Window.hpp"
-#include "Core/EventSystem.hpp"
+#include "Game/GameManager.hpp"
 
 namespace CC
 {
@@ -19,7 +18,6 @@ namespace CC
 	public:
 		inline static Application& Get() { return *m_application; }
 
-		bool Init();
 		void Run();
 
 	private:
@@ -31,6 +29,7 @@ namespace CC
 
 	private:
 		std::unique_ptr<Window> m_Window;
+		Game::GameManager m_GameManager;
 
 	};
 }

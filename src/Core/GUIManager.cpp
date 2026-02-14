@@ -3,24 +3,13 @@
 #include "Core/EventSystem.hpp"
 #include "Core/Application.hpp"
 
-void CC::GUIManager::InitGUIManager(sf::RenderWindow& window)
+CC::GUIManager::GUIManager(sf::RenderWindow& window)
 {
 	m_gui = std::make_unique<tgui::Gui>(window);
 }
 
-void CC::GUIManager::OnStart()
+void CC::GUIManager::UpdateGUIEvents(const std::optional<sf::Event>& event)
 {
-	CCLOG("GUI Manager Started!\n");
-}
-
-void CC::GUIManager::OnUpdate()
-{
-	std::optional<sf::Event> evt = EventSystem::Get().GetEvent();
-	if(evt.has_value())
-		m_gui->handleEvent(evt.value());
-	
-}
-void CC::GUIManager::OnDestroy()
-{
-
+	if(event.has_value())
+		m_gui->handleEvent(event.value());
 }

@@ -1,5 +1,7 @@
 #include "PCH.hpp"
 #include "Core/Application.hpp"
+#include "Core/LayerManager.hpp"
+#include "Core/Layer.hpp"
 
 using namespace CC;
 
@@ -22,28 +24,13 @@ bool Application::Init()
 	CCLOG("Application Initialized Successfully!\n");
 	
 	EventHandleID closehandle;
-	EventHandleID key1;
-	EventHandleID key2;
 	EventSystem::Get().Subscribe(EventType::WINDOW_CLOSE, closehandle, BIND_EVENT_FUNCTION(Application, CloseApp));
-	EventSystem::Get().Subscribe(EventType::KEY_PRESSED, key1, BIND_EVENT_FUNCTION(Application, TestKeyPress));
-	//EventSystem::Get().Subscribe(EventType::KEY_PRESSED, key1, BIND_EVENT_FUNCTION(Application, TestKeyPress2));
+
+	LayerManager manager;
+	manager.PushLayer("Layer1", 6);
+	manager.PushLayer("Layer2", 5);
+	//manager.EraseLayer("Layer2");
 	
-	EventSystem::Get().CreateCustomEvent("TEST");
-	EventSystem::Get().CreateCustomEvent("TEST2");
-
-	EventHandleID customCall;
-	EventHandleID customCall2 = 0;
-	EventSystem::Get().Subscribe("TEST", customCall, BIND_CUSTOM_EVENT_FUNCTION(Application, CustomEvent));
-	EventSystem::Get().Subscribe("TEST", customCall2, BIND_CUSTOM_EVENT_FUNCTION(Application, CustomEvent2));
-
-	EventSystem::Get().Unsubscribe(customCall2);
-	EventSystem::Get().CustomNotify("TEST");
-	CCLOG("ID IS: {}", customCall2);
-
-
-	//EventSystem::Get().Unsubscribe(key1);
-	
-
 	return true;
 }
 void Application::CloseApp(const sf::Event::Closed& evt)
@@ -60,7 +47,7 @@ void Application::TestKeyPress2(const sf::Event::KeyPressed& evt)
 	if (evt.code == sf::Keyboard::Key::Enter)
 		CCLOG("ENTER PRESSED 2");
 }
-void Application::CustomEvent()
+void Application::CustomEvent0()
 {
 	CCLOG("CUSTOM EVENT");
 }

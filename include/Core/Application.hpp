@@ -26,7 +26,7 @@ namespace CC
 		void CloseApp(const sf::Event::Closed& evt);
 		void TestKeyPress(const sf::Event::KeyPressed& evt);
 		void TestKeyPress2(const sf::Event::KeyPressed& evt);
-		void CustomEvent();
+		void CustomEvent0();
 		void CustomEvent2();
 
 	private:

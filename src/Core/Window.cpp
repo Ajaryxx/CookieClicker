@@ -15,7 +15,11 @@ Window::Window(const WindowParameters& specification, std::function<void(const s
 		m_Specification.state,
 		m_Specification.ContextSettings);
 
-	ASSERT(EventUpdateFunc, "EVENT_UPDATE_FUNC HAS TO BE A VALID PTR");
+
+	m_Window.setVerticalSyncEnabled(m_Specification.vSync);
+	m_Window.setFramerateLimit(m_Specification.fpsLimit);
+
+	CCASSERT(EventUpdateFunc, "EVENT_UPDATE_FUNC HAS TO BE A VALID PTR");
 	m_EventUpdateFunc = EventUpdateFunc;
 
 
@@ -35,7 +39,6 @@ void Window::Loop()
 		}
 
 		
-
 		m_Window.clear();
 
 		m_Window.display();

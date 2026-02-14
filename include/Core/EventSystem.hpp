@@ -20,6 +20,13 @@ namespace CC
 		KEY_PRESSED
 	};
 
+
+	struct CustomEvent
+	{
+		std::string CustomEventName;
+		EventHandleID handleID;
+	};
+
 	struct Visitor
 	{
 
@@ -83,17 +90,19 @@ namespace CC
 		void UpdateEvents(const std::optional<sf::Event>& evt);
 		//Subscribe to an SFML Event
 		template<typename FUNC>
-		void Subscribe(EventType evt, EventHandleID& handleID, FUNC handler);
+		bool Subscribe(EventType evt, EventHandleID& handleID, FUNC handler);
 		//Subscribe to a custom event
 		template<typename FUNC>
-		void Subscribe(const std::string& eventName, EventHandleID& handlerID, FUNC handler);
+		bool Subscribe(const std::string& eventName, EventHandleID& handlerID, FUNC handler);
 		//Create a custom event
-		void CreateCustomEvent(const std::string& eventName);
+		bool CreateCustomEvent(const std::string& eventName);
 		//Unsubscribe an event(SFML and custom)
 		void Unsubscribe(EventHandleID& handleID);
 		//Notifys all the functions that are bound to this event
-		void CustomNotify(const std::string& customEventName);
-		
+		void CustomNotify(const std::string& evtName);
+		//Deletes a custom event and all its handlers
+		//NOTE: This wont reset the handlerIDS of the handlers that were bound to this event. You will have to manually reset those handlerIDs or you can reuse the handlers
+		bool DeleteCustomEvent(const std::string& evtName);
 	private:
 		EventSystem();
 		//Notifys SFML events
@@ -112,12 +121,13 @@ namespace CC
 	};
 
 	template<typename FUNC>
-	inline void EventSystem::Subscribe(EventType evt, EventHandleID& handleID, FUNC handler)
+	inline bool EventSystem::Subscribe(EventType evt, EventHandleID& handleID, FUNC handler)
 	{
 		if (!IsValidEventID(handleID))
 		{
 			CCLOG("You are trying to override an existing handle! HandleID: {}; EventType: {}", handleID, (uint8)evt);
-			return;
+			handleID = -1;
+			return false;
 		}
 		
 		handleID = GenerateValidHandlerID();
@@ -126,24 +136,29 @@ namespace CC
 		m_umap_EventDispatch[handleID] = handler;
 
 		CCLOG("Event subscribed. Handle was bound to: {}", handleID);
+
+		return true;
 	}
 
 	template<typename FUNC>
-	inline void EventSystem::Subscribe(const std::string& eventName, EventHandleID& handlerID, FUNC handler)
+	inline bool EventSystem::Subscribe(const std::string& eventName, EventHandleID& handlerID, FUNC handler)
 	{
 		if (!IsCustomEventNameValid(eventName) || !IsValidEventID(handlerID))
 		{
 			CCLOG("Couldnt find event with name: {} OR you were trying to override the handlerID: {}", eventName, handlerID);
-			return;
+			handlerID = -1;
+			return false;
 		}
 		handlerID = GenerateValidHandlerID();
-
 		auto it = m_umap_Mapping.find(eventName);
+
 		//link handlerID with event and function
 		it->second.push_back(handlerID);
 		m_umap_EventDispatch[handlerID] = std::function<void()>(handler);
 
 		CCLOG("Subscribed to custom event: {}; HandleID: {}", eventName, handlerID);
+
+		return true;
 	}
 
 }

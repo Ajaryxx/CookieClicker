@@ -25,6 +25,11 @@ namespace CC
 		sf::State state;
 		sf::ContextSettings ContextSettings{};
 
+		bool vSync = true;
+		//NOTE: Setting this to 0 will disable the framerate limit
+		uint32 fpsLimit = 60;
+
+
 	};
 
 	enum ApplicationFlags : uint8

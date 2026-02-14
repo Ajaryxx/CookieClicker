@@ -25,7 +25,7 @@ inline int ShowMessageBox(HWND window, LPCWSTR message, LPCWSTR caption, UINT ut
 #endif
 
 
-#define ASSERT(cond, message) assert(cond && message)
+#define CCASSERT(cond, message) assert(cond && message)
 
 #define BASEOF_REQUIRED(Parent, Child, message) static_assert(std::is_base_of<Child, Parent>::value, message)
 

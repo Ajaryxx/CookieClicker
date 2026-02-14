@@ -1,5 +1,5 @@
 #pragma once
-#include "BaseValues.hpp"
+#include "Utilities.hpp"
 
 namespace CC
 {
@@ -14,6 +14,7 @@ namespace CC
 		void Loop();
 		void Close();
 	private:
+		void Render();
 
 		sf::RenderWindow m_Window;
 		WindowParameters m_Specification;

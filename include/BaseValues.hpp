@@ -35,6 +35,8 @@ namespace CC
 	enum ApplicationFlags : uint8
 	{
 		NONE = 1 << 0,
+		INFINITE_POINTS = 1 << 1,
+		UNLOCKED_ALL = 1 << 2,
 	};
 
 	struct ApplicationSpecification

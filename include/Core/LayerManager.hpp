@@ -1,6 +1,6 @@
 #pragma once
-#include "BaseValues.hpp"
-
+#include "Utilities.hpp"
+#include "Core/Layer.hpp"
 
 namespace CC
 {
@@ -19,10 +19,11 @@ namespace CC
 		LayerManager() = default;
 		~LayerManager() = default;
 
-		inline const std::vector<LayerSpecification>& GetLayers() { return m_vecLayers; }
-		const Layer& GetLayer(const std::string& LayerName) const;
+		inline const std::vector<LayerSpecification>& GetSceneLayers() const { return m_vecLayers; }
+		// Returns a pointer to the layer with the specified name, or nullptr if not found.
+		const CC::Layer* GetLayer(const std::string& LayerName) const;
 
-	//protected:
+	protected:
 		void PushLayer(const std::string& LayerName, uint8 zOrder);
 		void EraseLayer(const std::string& LayerName);
 	private:

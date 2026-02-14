@@ -1,1 +1,1 @@
-target_sources(${GAME_EXE} PRIVATE "Application.cpp" "Window.cpp" "EventSystem.cpp" "LayerManager.cpp" "Layer.cpp")
+target_sources(${GAME_EXE} PRIVATE "Application.cpp" "Window.cpp" "EventSystem.cpp" "LayerManager.cpp" "Layer.cpp" "Scene.cpp" "GUIManager.cpp")

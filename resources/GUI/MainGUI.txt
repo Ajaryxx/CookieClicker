@@ -1,0 +1,9 @@
+Picture.IMG_Settings {
+    Position = (720, 10);
+    Size = (74, 74);
+
+    Renderer {
+        Texture = "../Widgets/UI_TravelBook_IconGear01a.png" NoSmooth;
+        TransparentTexture = true;
+    }
+}

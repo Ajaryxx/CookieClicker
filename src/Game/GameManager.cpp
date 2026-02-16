@@ -9,7 +9,7 @@ CC::Game::GameManager::GameManager(CC::Application* app, uint8 flags)
 {
 	this->m_app = app;
 	this->m_flags = flags;
-	CCLOG("Game Manager Initialized Successfully!\n");
+	CCLOG("Game Manager Initialized Successfully!");
 }
 
 CC::Game::GameManager::~GameManager()

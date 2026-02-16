@@ -2,13 +2,31 @@
 #include "Game/GameManager.hpp"
 #include "Game/CCMainScene.hpp"
 #include "Core/GUIManager.hpp"
+#include "Core/Application.hpp"
 
-CC::Game::GameManager::GameManager(uint8 flags)
+
+CC::Game::GameManager::GameManager(CC::Application* app, uint8 flags)
 {
+	this->m_app = app;
 	this->m_flags = flags;
-	m_currentScene = std::make_unique<CCMainScene>();
+	CCLOG("Game Manager Initialized Successfully!\n");
 }
-void CC::Game::GameManager::OnUpdate(float deltaTime)
+
+CC::Game::GameManager::~GameManager()
 {
-	m_currentScene->OnUpdate(deltaTime);
+	CCLOG("Game Manager Destroyed Successfully!");
+}
+
+void CC::Game::GameManager::Start()
+{
+	m_currentScene = std::make_unique<CCMainScene>();
+	m_currentScene->Start();
+}
+void CC::Game::GameManager::Update(float deltaTime)
+{
+	m_currentScene->Update(deltaTime);
+}
+void CC::Game::GameManager::Destroy()
+{
+	m_currentScene->Destroy();
 }

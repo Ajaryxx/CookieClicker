@@ -53,6 +53,6 @@ void CC::Window::Render(const std::vector<LayerSpecification>& layers)
 			m_Window.draw(*drawable);
 		}
 	}
-
+	m_GUIManager->RenderGUI();
 	m_Window.display();
 }

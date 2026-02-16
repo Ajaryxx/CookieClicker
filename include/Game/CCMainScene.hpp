@@ -1,22 +1,26 @@
 #pragma once
 #include "Core/Scene.hpp"
 
-namespace CC
+namespace CC { class GUIManager; }
+
+namespace CC::Game
 {
-	namespace Game
+
+	class CCMainScene : public Scene
 	{
-		class CCMainScene : public Scene
-		{
-		public:
-			CCMainScene() : Scene("CCMainScene") {}
-			~CCMainScene() = default;
+	public:
+		CCMainScene();
+		~CCMainScene() = default;
 
-		private:
+	private:
 
-			// Inherited via Scene
-			void OnStart() override;
-			void OnUpdate(float deltaTime) override;
-			void OnDestroy() override;
-		};
-	}
+		// Inherited via Scene
+		void Start() override;
+		void Update(float deltaTime) override;
+		void Destroy() override;
+
+	private:
+		GUIManager* m_guiManager = nullptr;
+	};
+
 }

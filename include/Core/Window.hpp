@@ -16,7 +16,7 @@ namespace CC
 
 		inline GUIManager& GetGUIManager() { return *m_GUIManager; }
 		inline const sf::RenderWindow& GetRenderWindow() const { return m_Window; }
-		
+		inline bool IsOpen() const { return m_Window.isOpen(); }
 
 		void PollEvents();
 		void CloseWindow();

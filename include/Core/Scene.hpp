@@ -7,11 +7,11 @@ namespace CC
 	{
 	public:
 		Scene(const std::string& m_SceneName) : m_SceneName(m_SceneName) {}
-		~Scene() = default;
+		virtual ~Scene() = default;
 
-		virtual void OnStart() = 0;
-		virtual void OnUpdate(float deltaTime) = 0;
-		virtual void OnDestroy() = 0;
+		virtual void Start() = 0;
+		virtual void Update(float deltaTime) = 0;
+		virtual void Destroy() = 0;
 
 	private:
 

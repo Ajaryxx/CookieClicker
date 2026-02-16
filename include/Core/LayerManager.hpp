@@ -17,7 +17,7 @@ namespace CC
 	{
 	public:
 		LayerManager() = default;
-		~LayerManager() = default;
+		virtual ~LayerManager() = default;
 
 		inline const std::vector<LayerSpecification>& GetSceneLayers() const { return m_vecLayers; }
 		// Returns a pointer to the layer with the specified name, or nullptr if not found.

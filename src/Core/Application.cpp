@@ -3,43 +3,49 @@
 #include "Core/EventSystem.hpp"
 #include "Game/GameManager.hpp"
 
-using namespace CC;
 
-Application::Application(const ApplicationSpecification& specification) : m_GameManager(Game::GameManager(m_ApplicationSpecification.ApplicationFlags))
+CC::Application::Application(const ApplicationSpecification& specification)
 {
 	this->m_ApplicationSpecification = specification;
 	m_application = this;
 
 	m_Window = std::make_unique<Window>(m_ApplicationSpecification.windowSettings);
-	CCLOG("Application Initialized Successfully!\n");
 
 	EventHandleID closehandle;
 	EventSystem::Get().Subscribe(EventType::WINDOW_CLOSE, closehandle, BIND_EVENT_FUNCTION(Application, CloseApp));
+
+	m_GameManager = std::make_unique<Game::GameManager>(this, m_ApplicationSpecification.ApplicationFlags);
+
+	CCLOG("Application Initialized Successfully!\n");
 }
 
-Application::~Application()
+CC::Application::~Application()
 {
-
+	CCLOG("Application Destroyed Successfully!");
 }
 
-void Application::CloseApp(const sf::Event::Closed& evt)
+void CC::Application::CloseApp(const sf::Event::Closed& evt)
 {
+	m_GameManager->Destroy();
 	m_Window->CloseWindow();
 }
-void Application::Run()
+void CC::Application::Run()
 {
-	const sf::RenderWindow& window = m_Window->GetRenderWindow();
+	m_GameManager->Start();
+
 	sf::Clock clock;
 
-	while (window.isOpen())
+	while (m_Window->IsOpen())
 	{
 		float deltaTime = clock.restart().asSeconds();
 
-		//Handle events
+		//Window is handling all the events
 		m_Window->PollEvents();
 
-		m_GameManager.OnUpdate(deltaTime);
+		//updating the game
+		m_GameManager->Update(deltaTime);
 
-		m_Window->Render(m_GameManager.GetCurrentScene()->GetSceneLayers());
+		//rendering the game
+		m_Window->Render(m_GameManager->GetCurrentScene()->GetSceneLayers());
 	}
 }

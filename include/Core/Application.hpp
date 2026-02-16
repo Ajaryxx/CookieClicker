@@ -1,7 +1,8 @@
 #pragma once
 #include "Utilities.hpp"
 #include "Core/Window.hpp"
-#include "Game/GameManager.hpp"
+
+namespace CC::Game { class GameManager; }
 
 namespace CC
 {
@@ -17,6 +18,8 @@ namespace CC
 
 	public:
 		inline static Application& Get() { return *m_application; }
+		inline Game::GameManager& GetGameManager() { return *m_GameManager.get(); }
+		inline Window& GetWindow() const { return *m_Window; }
 
 		void Run();
 
@@ -29,7 +32,7 @@ namespace CC
 
 	private:
 		std::unique_ptr<Window> m_Window;
-		Game::GameManager m_GameManager;
+		std::unique_ptr<Game::GameManager> m_GameManager;
 
 	};
 }

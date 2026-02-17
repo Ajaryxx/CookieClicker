@@ -15,16 +15,6 @@
 
 #endif
 
-#if defined(_WIN32)
-//WINDOWS ONLY
-//returns the result which button was pressed
-inline int ShowMessageBox(HWND window, LPCSTR message, LPCSTR caption, UINT utype)
-{
-	return MessageBoxA(window, message, caption, utype);
-}
-#endif
-
-
 #define CCASSERT(cond, message) assert(cond && message)
 
 #define BASEOF_REQUIRED(Parent, Child, message) static_assert(std::is_base_of<Child, Parent>::value, message)

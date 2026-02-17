@@ -35,7 +35,7 @@ void CC::Game::CCMainScene::BuildMainGUI()
 	m_guiManager->PushGUI("MainCCGUI", true);
 
 	auto SettingsBtn = m_guiManager->AddWidgetToGUI<tgui::Button>("MainCCGUI", "BTN");
-	SettingsBtn->getRenderer()->setTexture(*ResourceManager::Get().GetResource<sf::Texture>("Textures\\MissingTexture.png"));
+	SettingsBtn->getRenderer()->setTexture(*ResourceManager::Get().GetResource<sf::Texture>(MakePath({"Textures", "MissingTexture.png"})));
 	
 
 }

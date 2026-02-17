@@ -7,17 +7,20 @@ namespace CC
 	using EvtCustomEvent = std::function<void()>;
 	using EvtWindowClosed = std::function<void(const sf::Event::Closed&)>;
 	using EvtKeyPressed = std::function<void(const sf::Event::KeyPressed&)>;
+	using EvtWindowResized = std::function<void(const sf::Event::Resized&)>;
 
 
 	using EventHandler = std::variant<
 		EvtCustomEvent,
 		EvtWindowClosed,
-		EvtKeyPressed>;
+		EvtKeyPressed,
+		EvtWindowResized>;
 
 	enum EventType : uint8
 	{
 		WINDOW_CLOSE,
-		KEY_PRESSED
+		KEY_PRESSED,
+		WINDOW_RESIZED,
 	};
 
 
@@ -40,6 +43,10 @@ namespace CC
 		void operator()(const sf::Event::KeyPressed& evt)
 		{
 			FireEvent<EvtKeyPressed>(EventType::KEY_PRESSED, evt);
+		}
+		void operator()(const sf::Event::Resized& evt)
+		{
+			FireEvent<EvtWindowResized>(EventType::WINDOW_RESIZED, evt);
 		}
 
 		void operator()(const sf::Event& evt) {}

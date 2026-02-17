@@ -19,6 +19,11 @@ namespace CC::Game
 		void Update(float deltaTime) override;
 		void Destroy() override;
 
+
+		void BuildGUIs();
+		void BuildMainGUI();
+
+
 	private:
 		GUIManager* m_guiManager = nullptr;
 	};

@@ -4,24 +4,34 @@ project(CookieClicker
 VERSION 0.0.1
 LANGUAGES CXX)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+
 #Proj variables
 set(GAME_EXE "CookieClicker")
-
 
 #setup EXE Target	
 add_executable(${GAME_EXE} "src/main.cpp")
 
+#copy resources to bin/resources
+add_custom_command(TARGET ${GAME_EXE}
+POST_BUILD
+COMMAND "${CMAKE_COMMAND}" -E copy
+"${CMAKE_SOURCE_DIR}/resources"
+"${CMAKE_SOURCE_DIR}/bin/")
+
+#set Windows subsystem if release
 if(WIN32)
     target_link_options(${GAME_EXE} PRIVATE
         "$<$<CONFIG:Release>:/SUBSYSTEM:WINDOWS>"
     )
 endif()
 
+#add support for __VA_OPT__ macro
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 target_compile_options(${GAME_EXE} PUBLIC /Zc:preprocessor)
 endif()
 
-
+#set properties
 set_target_properties(${GAME_EXE} PROPERTIES
 CXX_STANDARD 23
 CXX_STANDARD_REQUIRED ON
@@ -48,6 +58,7 @@ set(SFML_BUILD_NETWORK OFF)
 FetchContent_MakeAvailable(sfml)
 set(TGUI_BACKEND "SFML_GRAPHICS")
 set(SFML_DIR ${SFML_SOURCE_DIR})
+set(TGUI_BUILD_GUI_BUILDER OFF)
 FetchContent_MakeAvailable(tgui)
 
 #link with EXE

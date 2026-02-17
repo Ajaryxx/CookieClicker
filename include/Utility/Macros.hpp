@@ -18,9 +18,9 @@
 #if defined(_WIN32)
 //WINDOWS ONLY
 //returns the result which button was pressed
-inline int ShowMessageBox(HWND window, LPCWSTR message, LPCWSTR caption, UINT utype)
+inline int ShowMessageBox(HWND window, LPCSTR message, LPCSTR caption, UINT utype)
 {
-	return MessageBoxW(window, message, caption, utype);
+	return MessageBoxA(window, message, caption, utype);
 }
 #endif
 

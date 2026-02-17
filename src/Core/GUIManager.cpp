@@ -4,6 +4,10 @@
 
 CC::GUIManager::GUIManager(sf::RenderWindow& window) : m_window(window)
 {
+
+	EventHandleID IDResized;
+	EventSystem::Get().Subscribe(EventType::WINDOW_RESIZED, IDResized, BIND_EVENT_FUNCTION(GUIManager, ResizeWidgets));
+
 	CCLOG("GUI Manager Initialized Successfully!");
 }
 
@@ -33,9 +37,8 @@ void CC::GUIManager::RenderGUI()
 			item.second.gui->draw();
 	}
 }
-void CC::GUIManager::PushGUI(const std::string& GUIName, const std::string& path, bool active)
+void CC::GUIManager::PushGUI(const std::string& GUIName, bool active)
 {
-	CCASSERT(std::filesystem::exists(path), "File doesnt exits");
 	if (GUINameExits(GUIName))
 	{
 		CCASSERT(false, "GUI name already exits");
@@ -43,12 +46,15 @@ void CC::GUIManager::PushGUI(const std::string& GUIName, const std::string& path
 	}
 	
 	m_umap_GUIS[GUIName] = GUIWrapper{ std::make_unique<tgui::Gui>(m_window), active };
-	m_umap_GUIS.find(GUIName)->second.gui->loadWidgetsFromFile(path);
-
 }
 
 bool CC::GUIManager::GUINameExits(const std::string& GUIName) const
 {
 	auto AIt = m_umap_GUIS.find(GUIName);
 	return  AIt != m_umap_GUIS.end();;
+}
+
+void CC::GUIManager::ResizeWidgets(const sf::Event::Resized& evt)
+{
+	
 }

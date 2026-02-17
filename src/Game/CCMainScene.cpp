@@ -5,8 +5,9 @@
 CC::Game::CCMainScene::CCMainScene() : Scene("CCMainScene")
 {
 	m_guiManager = &CC::Application::Get().GetWindow().GetGUIManager();
-	m_guiManager->LoadGUIFromFile("C:\\Users\\joelf\\Documents\\CodingProjects\\CookieClicker\\resources\\GUI\\MainGUI.txt");
-	auto pic = m_guiManager->GetWidget<tgui::Button>("IMG_Settings");
+	m_guiManager->PushGUI("Main", "C:\\Users\\joelf\\Documents\\CodingProjects\\CookieClicker\\resources\\GUI\\MainGUI.txt", true);
+	tgui::Button::Ptr b = m_guiManager->GetWidgetOfGUI<tgui::Button>("Main", "BTN_Settings");
+	b->onClick([]() {CCLOG("HELLOOOOO"); });
 }
 
 void CC::Game::CCMainScene::Start()

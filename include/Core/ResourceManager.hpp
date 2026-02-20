@@ -15,7 +15,7 @@ namespace CC
 	public:
 		~ResourceManager() = default;
 
-		static ResourceManager& Get() 
+		static ResourceManager& Get()
 		{
 			static ResourceManager manager;
 			return manager;
@@ -26,16 +26,19 @@ namespace CC
 		template<typename T>
 		std::shared_ptr<T> GetResource(const std::string& ResourceName);
 
+		inline bool IsInitSuccess() const { return InitSuccess; }
 	private:
 		ResourceManager();
 		fs::path m_ResourcePath;
-
 
 		template<typename T>
 		std::shared_ptr<T> ResourceExits(const std::string& ResourceName) const;
 
 		template<typename T>
 		std::shared_ptr<T> LoadResourceFromFile(const std::string& relativePath);
+
+		const std::string MissingTextureRelPath = "Textures/MissingTexture.png";
+		bool InitSuccess = false;
 
 	};
 	template<typename T>
@@ -54,7 +57,17 @@ namespace CC
 			CCLOG("Resource: {} loaded. Returning needed resource", ResourceName);
 			return LoadedRes;
 		}
-		
+
+		CCLOG("Couldn't find texture, lets return the missing texture.");
+		//if its a texure and we cannot find it, we return missing texture instead
+		auto& VariantTex = m_umap_Resources.find(MissingTextureRelPath)->second;
+		if (std::holds_alternative<std::shared_ptr<sf::Texture>>(VariantTex))
+		{
+			if (auto MissingTex = std::get_if<std::shared_ptr<sf::Texture>>(&VariantTex))
+			{
+				return *MissingTex;
+			}
+		}
 		return nullptr;
 	}
 

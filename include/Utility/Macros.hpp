@@ -6,14 +6,8 @@
 	#define CCLOG(message, ...) do { } while(0)
 #endif
 
-#if defined(_WIN32) && defined(__DEBUG)
-	#define ShowMBox(window, message, caption, utype) ShowMessageBox(window, message, caption, utype)
 
-#else
-	//Linux dummy macro
-	#define ShowMBox(window, message, caption, utype) do { } while(0)
-
-#endif
+#define MESSAGE_BOX(window, message, title, style) MessageBoxA(window, message, title, style)
 
 #define CCASSERT(cond, message) assert(cond && message)
 

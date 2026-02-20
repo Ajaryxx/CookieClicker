@@ -21,8 +21,8 @@ namespace CC
 		inline Game::GameManager& GetGameManager() { return *m_GameManager.get(); }
 		inline Window& GetWindow() const { return *m_Window; }
 
-		void Run();
-
+		bool Run();
+		void RequestShutdown(bool shutdown = false);
 	private:
 		void CloseApp(const sf::Event::Closed& evt);
 
@@ -34,6 +34,7 @@ namespace CC
 		std::unique_ptr<Window> m_Window;
 		std::unique_ptr<Game::GameManager> m_GameManager;
 
+		bool IsAppOk = false;
 	};
 }
 

@@ -2,7 +2,7 @@
 #include "Core/Application.hpp"
 #include "Core/EventSystem.hpp"
 #include "Game/GameManager.hpp"
-
+#include "Core/ResourceManager.hpp"
 
 CC::Application::Application(const ApplicationSpecification& specification)
 {
@@ -13,6 +13,14 @@ CC::Application::Application(const ApplicationSpecification& specification)
 
 	EventHandleID closehandle;
 	EventSystem::Get().Subscribe(EventType::WINDOW_CLOSE, closehandle, BIND_EVENT_FUNCTION(Application, CloseApp));
+
+	IsAppOk = ResourceManager::Get().IsInitSuccess();
+
+	if (!IsAppOk)
+	{
+		m_Window->CloseWindow();
+		return;
+	}
 
 	m_GameManager = std::make_unique<Game::GameManager>(this, m_ApplicationSpecification.ApplicationFlags);
 
@@ -29,8 +37,11 @@ void CC::Application::CloseApp(const sf::Event::Closed& evt)
 	m_GameManager->Destroy();
 	m_Window->CloseWindow();
 }
-void CC::Application::Run()
+bool CC::Application::Run()
 {
+	if (!IsAppOk)
+		return false;
+
 	m_GameManager->Start();
 
 	sf::Clock clock;
@@ -48,4 +59,6 @@ void CC::Application::Run()
 		//rendering the game
 		m_Window->Render(m_GameManager->GetCurrentScene()->GetSceneLayers());
 	}
+
+	return IsAppOk;
 }

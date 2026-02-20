@@ -19,6 +19,7 @@ Window::Window(const WindowParameters& specification)
 
 	m_Window.setVerticalSyncEnabled(m_Specification.vSync);
 	m_Window.setFramerateLimit(m_Specification.fpsLimit);
+	m_Window.setMinimumSize(std::optional<sf::Vector2u>({400, 300}));
 
 	m_GUIManager = std::make_unique<GUIManager>(m_Window);
 

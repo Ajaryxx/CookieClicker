@@ -51,7 +51,7 @@ void CC::GUIManager::PushGUI(const std::string& GUIName, bool active)
 bool CC::GUIManager::GUINameExits(const std::string& GUIName) const
 {
 	auto AIt = m_umap_GUIS.find(GUIName);
-	return  AIt != m_umap_GUIS.end();;
+	return AIt != m_umap_GUIS.end();;
 }
 
 void CC::GUIManager::ResizeWidgets(const sf::Event::Resized& evt)

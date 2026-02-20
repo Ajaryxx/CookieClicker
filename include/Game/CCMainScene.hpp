@@ -23,7 +23,6 @@ namespace CC::Game
 		void BuildGUIs();
 		void BuildMainGUI();
 
-
 	private:
 		GUIManager* m_guiManager = nullptr;
 	};

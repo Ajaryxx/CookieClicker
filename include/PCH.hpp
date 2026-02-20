@@ -10,6 +10,7 @@
 #include <format>
 #include <vector>
 #include <typeindex>
+#include <cmath>
 #include <functional>
 #include <variant>
 #include <filesystem>

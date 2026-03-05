@@ -34,20 +34,14 @@ void CC::Game::CCMainScene::BuildMainGUI()
 {
 	ResourceManager& RManager = ResourceManager::Get();
 
-	m_guiManager->PushGUI("MainCCGUI", true);
-	auto SettingsBtn = m_guiManager->AddWidgetToGUI<tgui::Button>("MainCCGUI", "BTN_Settings");
-	//auto SettingsBtn2 = m_guiManager->AddWidgetToGUI<tgui::Button>("MainCCGUI", "BTN_Settings2");
-
-	//button layout
-	ButtonLayout layout{};
-	layout.text = "";
-	layout.size = tgui::Layout2d("20%", "25%");
-	layout.position = tgui::Layout2d("100% - &.size.width", "0%");
+	m_guiManager->AddGroup("TEST")->setSize(10, 10);
+	auto btn1 = m_guiManager->AddWidgetToGroup<tgui::Button>("TEST", "BTN1");
 	
-	layout.UnfocusedTexture = *RManager.GetResource<sf::Texture>("Widgets/UI_UnfocusedGear.png");
-	layout.HoverTexture = *RManager.GetResource<sf::Texture>("Widgets/UI_FocusedGear.png");
+	//btn1->setPosition(tgui::Layout2d("50%", "50%"));
+	ButtonLayout layout;
+	layout.text = "Hello";
+	layout.size = tgui::Layout2d(50.f, 50.f);
 
-	
-	m_guiManager->SetLayoutWidget<tgui::Button>("MainCCGUI", "BTN_Settings", layout);
-	//m_guiManager->SetLayoutWidget<tgui::Button>("MainCCGUI", "BTN_Settings2", layout2);
+	m_guiManager->SetLayoutWidget<tgui::Button>("TEST", "BTN1", layout);
+
 }

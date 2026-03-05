@@ -4,11 +4,6 @@
 
 namespace CC
 {
-	struct GUIWrapper
-	{
-		std::unique_ptr<tgui::Gui> gui;
-		bool active;
-	};
 
 	class GUIManager
 	{
@@ -20,66 +15,67 @@ namespace CC
 		
 		void UpdateGUIEvents(const std::optional<sf::Event>& event);
 		void RenderGUI();
-		void PushGUI(const std::string& GUIName, bool active = false);
 		//Can return nullptr
 		template<typename T>
-		T::Ptr GetWidgetOfGUI(const std::string& GUIName, const std::string& WidgetName);
+		T::Ptr GetWidgetInGroup(const std::string& groupName, const std::string& WidgetName);
 		//Adds an widget to the gui and returns it
 		//NOTE: Can return nullptr
 		template<typename T>
-		T::Ptr AddWidgetToGUI(const std::string& GUIName, const std::string& WidgetName = "");
+		T::Ptr AddWidgetToGroup(const std::string& groupName, const std::string& WidgetName = "");
 		//build a layout for a widget
-		template<typename WIDGET>
-		void SetLayoutWidget(const std::string& GUIName, const std::string& WidgetName, BaseLayout& builder);
-
+		template<typename T>
+		void SetLayoutWidget(const std::string& groupName, const std::string& WidgetName, BaseLayout& builder);
+		tgui::Group::Ptr AddGroup(const std::string& groupName);
 	private:
-		bool GUINameExits(const std::string& GUIName) const;
 		void ResizeWidgets(const sf::Event::Resized& evt);
 		
-
+		inline tgui::Group::Ptr GetGroup(const std::string& groupName) const { return m_gui.get<tgui::Group>(groupName); }
 	private:
-		sf::RenderWindow& m_window;
-	
-		std::unordered_map<std::string, GUIWrapper> m_umap_GUIS;
-		std::unordered_map<std::string, sf::Vector2f> m_umNormalizedPos;
-	
+		tgui::Gui m_gui;
+		
 	};
 
 	template<typename T>
-	inline T::Ptr GUIManager::GetWidgetOfGUI(const std::string& GUIName, const std::string& WidgetName)
+	inline T::Ptr GUIManager::GetWidgetInGroup(const std::string& groupName, const std::string& WidgetName)
 	{
-		if (!GUINameExits(GUIName))
+		auto group = GetGroup(groupName);
+		if (!group)
 		{
-			CCASSERT(false, "GUI doesnt exits");
+			CCASSERT(false, "Group doesn't exists");
 			return nullptr;
 		}
-		return m_umap_GUIS.find(GUIName)->second.gui->get<T>(WidgetName);
+		auto widget = group->get<T>(WidgetName);
+		if (!widget)
+		{
+			CCASSERT(false, "Widget doesn't exists");
+		}
+
+		return widget;
 	}
 
 	template<typename T>
-	inline T::Ptr GUIManager::AddWidgetToGUI(const std::string& GUIName, const std::string& WidgetName)
+	inline T::Ptr GUIManager::AddWidgetToGroup(const std::string& groupName, const std::string& WidgetName)
 	{
-		if (!GUINameExits(GUIName) || GetWidgetOfGUI<T>(GUIName, WidgetName))
+		auto group = GetGroup(groupName);
+		if (!group || group->get<T>(WidgetName))
 		{
-			CCASSERT(false, "GUI doesnt exits or the Widget name already exits");
+			CCASSERT(false, "Group doesn't exists or Widget name already exists");
 			return nullptr;
 		}
 
-		auto& it = m_umap_GUIS.find(GUIName)->second.gui;
-		auto Widget = T::create(WidgetName);
-	
-		it->add(Widget, WidgetName);
+		auto Widget = T::create();
+		group->add(Widget, WidgetName);
 
 		return Widget;
 
 	}
-	template<typename WIDGET>
-	void GUIManager::SetLayoutWidget(const std::string& GUIName, const std::string& WidgetName, BaseLayout& builder)
+	template<typename T>
+	void GUIManager::SetLayoutWidget(const std::string& groupName, const std::string& WidgetName, BaseLayout& builder)
 	{
-		auto widget = GetWidgetOfGUI<WIDGET>(GUIName, WidgetName);
+		auto widget = GetWidgetInGroup<T>(groupName, WidgetName);
 		if (!widget)
 		{
-			CCLOG("Coulnd't find widget in GUI");
+			CCLOG("Coulnd't find widget");
 			CCASSERT(false, "Coulnd't find widget in GUI");
 			return;
 		}

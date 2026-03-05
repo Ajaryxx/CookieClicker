@@ -13,7 +13,7 @@ struct BaseLayout
 struct ButtonLayout : public BaseLayout
 {
 	std::string text;
-	bool border = false;
+	bool UseBorder = false;
 
 	sf::Texture UnfocusedTexture;
 	sf::Texture HoverTexture;
@@ -22,14 +22,19 @@ struct ButtonLayout : public BaseLayout
 	{
 		auto button = widget->cast<tgui::Button>();
 		if (!button)
+		{
+			CCASSERT(!button, "Widget is not a button");
 			return;
+		}
 		button->setText(text);
 		button->setPosition(position);
 		button->setSize(size);
 		tgui::ButtonRenderer* renderer = button->getRenderer();
-		renderer->setTexture(UnfocusedTexture);
-		renderer->setTextureHover(HoverTexture);
-		if (!border)
+
+		/*renderer->setTexture(UnfocusedTexture);
+		renderer->setTextureHover(HoverTexture);*/
+
+		if (!UseBorder)
 			renderer->setBorders(tgui::Borders(0, 0));
 	}
 };

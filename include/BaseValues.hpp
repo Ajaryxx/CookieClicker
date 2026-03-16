@@ -21,8 +21,8 @@ namespace CC
 	{
 		sf::String title;
 		sf::VideoMode WindowSize;
-		uint8 style;
-		sf::State state;
+		uint8 style = sf::Style::Default;
+		sf::State state = sf::State::Windowed;
 		sf::ContextSettings ContextSettings{};
 
 		bool vSync = true;

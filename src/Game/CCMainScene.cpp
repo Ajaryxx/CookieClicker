@@ -34,14 +34,5 @@ void CC::Game::CCMainScene::BuildMainGUI()
 {
 	ResourceManager& RManager = ResourceManager::Get();
 
-	m_guiManager->AddGroup("TEST")->setSize(10, 10);
-	auto btn1 = m_guiManager->AddWidgetToGroup<tgui::Button>("TEST", "BTN1");
-	
-	//btn1->setPosition(tgui::Layout2d("50%", "50%"));
-	ButtonLayout layout;
-	layout.text = "Hello";
-	layout.size = tgui::Layout2d(50.f, 50.f);
-
-	m_guiManager->SetLayoutWidget<tgui::Button>("TEST", "BTN1", layout);
 
 }

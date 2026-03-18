@@ -34,5 +34,7 @@ void CC::Game::CCMainScene::BuildMainGUI()
 {
 	ResourceManager& RManager = ResourceManager::Get();
 
+	m_guiManager->PushGroup("GTest");
+	m_guiManager->AddWidgetToGroup<tgui::Button>("GTest", "BTest", ButtonBuilder{});
 
 }

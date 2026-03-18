@@ -27,3 +27,19 @@ void CC::GUIManager::RenderGUI()
 {
 	m_gui.draw();
 }
+tgui::Group::Ptr CC::GUIManager::PushGroup(const std::string& GroupName)
+{
+	auto it = m_umapGroups.find(GroupName);
+	if (it != m_umapGroups.end())
+	{
+		CCASSERT(false, "GroupName already exists!");
+		return nullptr;
+	}
+	
+	auto group = tgui::Group::create();
+	m_umapGroups[GroupName] = group;
+
+	m_gui.add(group, GroupName);
+
+	return group;
+}

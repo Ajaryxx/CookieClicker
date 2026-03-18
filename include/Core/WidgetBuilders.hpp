@@ -2,17 +2,26 @@
 
 namespace CC
 {
-	struct BaseLayout
+	struct WidgetBuilder
 	{
-		tgui::Layout2d position;
-		tgui::Layout2d size;
+		sf::Vector2f position;
+		sf::Vector2f size;
 
-		virtual void BuildLayout(tgui::Widget::Ptr widget) const = 0;
+		void CheckAndBuildLayout(tgui::Widget::Ptr widget)
+		{
+			position.x = std::clamp(position.x, 0.f, 1.f);
+			position.y = std::clamp(position.y, 0.f, 1.f);
+
+			BuildLayout(widget);
+		}
+
+	private:
+		virtual void BuildLayout(tgui::Widget::Ptr widget) {}
 
 	};
 
 
-	struct ButtonLayout : public BaseLayout
+	struct ButtonBuilder : public WidgetBuilder
 	{
 		std::string text;
 		bool UseBorder = false;
@@ -20,7 +29,7 @@ namespace CC
 		sf::Texture UnfocusedTexture;
 		sf::Texture HoverTexture;
 
-		void BuildLayout(tgui::Widget::Ptr widget) const override
+		void BuildLayout(tgui::Widget::Ptr widget) override
 		{
 			auto button = widget->cast<tgui::Button>();
 			if (!button)
@@ -29,8 +38,8 @@ namespace CC
 				return;
 			}
 			button->setText(text);
-			button->setPosition(position);
-			button->setSize(size);
+			button->setPosition(tgui::Layout2d(position));
+			button->setSize(tgui::Layout2d(size));
 			tgui::ButtonRenderer* renderer = button->getRenderer();
 
 			/*renderer->setTexture(UnfocusedTexture);

@@ -34,7 +34,11 @@ void CC::Game::CCMainScene::BuildMainGUI()
 {
 	ResourceManager& RManager = ResourceManager::Get();
 
+	ButtonBuilder bt;
+	bt.position = sf::Vector2f(0.5f, 0.5f);
+	bt.size = sf::Vector2f(100.f, 100.f);
+
 	m_guiManager->PushGroup("GTest");
-	m_guiManager->AddWidgetToGroup<tgui::Button>("GTest", "BTest", ButtonBuilder{});
+	m_guiManager->AddWidgetToGroup<tgui::Button>("GTest", "BTest", bt);
 
 }

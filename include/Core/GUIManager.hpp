@@ -7,7 +7,7 @@ namespace CC
 
 	struct WidgetWrapper
 	{
-		WidgetBuilder Builder;
+		std::unique_ptr<WidgetBuilder> Builder;
 		tgui::Widget::Ptr Widget;
 	};
 
@@ -24,8 +24,8 @@ namespace CC
 	
 		tgui::Group::Ptr PushGroup(const std::string& GroupName);
 
-		template<typename T>
-		T::Ptr AddWidgetToGroup(const std::string& GroupName, const std::string& WidgetName, const WidgetBuilder& builder);
+		template<typename WIDGET, typename BUILDER>
+		WIDGET::Ptr AddWidgetToGroup(const std::string& GroupName, const std::string& WidgetName, const BUILDER& builder);
 
 		std::unordered_map<std::string, tgui::Group::Ptr> m_umapGroups;
 		std::unordered_map<std::string, WidgetWrapper> m_umapWidgets;
@@ -35,8 +35,8 @@ namespace CC
 	
 	};
 
-	template<typename T>
-	inline T::Ptr GUIManager::AddWidgetToGroup(const std::string& GroupName, const std::string& WidgetName, const WidgetBuilder& builder)
+	template<typename WIDGET, typename BUILDER>
+	inline WIDGET::Ptr GUIManager::AddWidgetToGroup(const std::string& GroupName, const std::string& WidgetName, const BUILDER& builder)
 	{
 		auto widget = m_umapWidgets.find(WidgetName);
 		auto Group = m_umapGroups.find(GroupName);
@@ -47,13 +47,15 @@ namespace CC
 			return nullptr;
 		}
 		
-		tgui::Button::Ptr newWidget = T::create();
+		auto newWidget = WIDGET::create();
 
-		m_umapWidgets[WidgetName] = WidgetWrapper{ builder, newWidget };
+		m_umapWidgets[WidgetName] = WidgetWrapper{ std::make_unique<BUILDER>(builder), newWidget };;
 
 		Group->second->add(newWidget, WidgetName);
 
-		builder.CheckAndBuildLayout(newWidget);
+		//should be safe to call this function
+		m_umapWidgets.find(WidgetName)->second.Builder->CheckAndBuildLayout(newWidget);
+
 
 		return newWidget;
 	}

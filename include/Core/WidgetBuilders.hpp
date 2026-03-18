@@ -16,7 +16,7 @@ namespace CC
 		}
 
 	private:
-		virtual void BuildLayout(tgui::Widget::Ptr widget) {}
+		virtual void BuildLayout(tgui::Widget::Ptr widget) = 0;
 
 	};
 
